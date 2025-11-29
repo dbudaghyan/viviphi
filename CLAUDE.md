@@ -12,6 +12,11 @@ This file provides guidance to Claude Code (claude.ai/code) when working with co
 - Use `ruff check` for linting and code inspection
 - Use `ruff format` for code formatting
 
+### Package Management
+- Use `uv add` to install/add packages
+- Use `uv add --dev` for adding dev packages
+- Use `uv sync --no-install-project` for updating project dependencies
+
 ## Code Guidelines
 
 ### Design Philosophy
