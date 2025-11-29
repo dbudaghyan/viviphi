@@ -33,6 +33,16 @@ This file provides guidance to Claude Code (claude.ai/code) when working with co
 - Avoid deeply nested or overly complex functions
 - Use Pydantic for all data models
 
+### Library Preferences
+- Use `loguru` for logging
+- Use `litellm` for LLM interactions
+- Use `jinja2` for creating/rendering prompts for LLMs
+- Use `uvicorn`/`fastapi` for creating APIs
+- Use `pytest` for testing
+
+### Testing Guidelines
+- When writing tests, make sure they are meaningful, i.e. the actual code is being tested and not the mocks
+
 ## Project Overview
 
 This is a Python project called "viviphi" that turns static graphs into beautiful animations.

@@ -14,3 +14,4 @@ The process of creating an animation with `Viviphi` can be broken down into the 
 ## Details
 If a description is provided, `Viviphi` calles an LLM (like `Claude` or `GPT-4`) to generate a series of intermediate `mermaid` graphs that illustrate the steps described in the description.
 If no description is provided, `Viviphi` passes the input graph to the LLM and asks it to generate a description of the graph first.
+Use `litellm` for LLM interactions.
