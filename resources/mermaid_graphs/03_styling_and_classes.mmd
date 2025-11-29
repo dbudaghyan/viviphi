@@ -1,0 +1,15 @@
+graph TD
+    A:::someClass --> B
+    B("Styled Inline"):::otherClass
+    C[Normal Node] --> D[Error Node]
+
+    %% Styles
+    style B fill:#f9f,stroke:#333,stroke-width:4px
+    style D fill:#bbf,stroke:#f66,stroke-width:2px,color:#fff,stroke-dasharray: 5 5
+
+    %% Class Definitions
+    classDef someClass fill:#f96,stroke:#333,stroke-width:2px;
+    classDef otherClass fill:#bbf,stroke:#333,stroke-width:2px;
+    classDef errorClass fill:#f00,color:white;
+
+    class D errorClass;

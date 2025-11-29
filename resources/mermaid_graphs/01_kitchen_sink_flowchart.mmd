@@ -1,0 +1,17 @@
+graph TD
+    %% Basic Shapes and Edges
+    A[Rectangular Node] -->|Text on Edge| B(Round Edge)
+    B --> C{Decision Diamond}
+    C -->|One| D[Result One]
+    C -->|Two| E[Result Two]
+
+    %% Complex Edges
+    E -.->|Dotted| F((Circle))
+    F ==>|Thick| G([Stadium])
+    G --o|Circle Edge| H[[Subroutine]]
+    H x-x|Cross Edge| I[(Database)]
+
+    %% Trapped Shapes & Odd Characters
+    J>Asymmetric] --> K{{Hexagon}}
+    K --> L[/Parallelogram/]
+    L --> M[\Trapezoid alt\]

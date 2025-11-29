@@ -1,0 +1,13 @@
+flowchart LR
+    subgraph TOP_LEVEL [Top Level Group]
+        direction TB
+        subgraph NESTED_A [Nested Cluster A]
+            direction RL
+            A1(Start A) --> A2(End A)
+        end
+        subgraph NESTED_B [Nested Cluster B]
+            B1{Check B} --> B2[Process B]
+        end
+        NESTED_A --> NESTED_B
+    end
+    OutsideNode --> TOP_LEVEL

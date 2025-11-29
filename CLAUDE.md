@@ -15,7 +15,7 @@ This file provides guidance to Claude Code (claude.ai/code) when working with co
 ### Package Management
 - Use `uv add` to install/add packages
 - Use `uv add --dev` for adding dev packages
-- Use `uv sync --no-install-project` for updating project dependencies
+- Always use `uv sync --no-install-project` instead of `uv sync`
 
 ## Code Guidelines
 
@@ -32,6 +32,7 @@ This file provides guidance to Claude Code (claude.ai/code) when working with co
 - Write modular, focused functions
 - Avoid deeply nested or overly complex functions
 - Use Pydantic for all data models
+- Always use logger instead of print statements
 
 ### Library Preferences
 - Use `loguru` for logging
@@ -42,6 +43,9 @@ This file provides guidance to Claude Code (claude.ai/code) when working with co
 
 ### Testing Guidelines
 - When writing tests, make sure they are meaningful, i.e. the actual code is being tested and not the mocks
+- When writing temporary files for testing, do it in the temp directory
+- When writing temporary outputs, put them in a separate folder
+- When writing permanent tests, do it in the tests folder
 
 ## Project Overview
 
