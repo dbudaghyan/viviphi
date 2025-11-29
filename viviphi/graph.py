@@ -6,6 +6,7 @@ from pathlib import Path
 from .themes import Theme, CYBERPUNK
 from .animator import SVGAnimator
 from .mermaid import MermaidRenderer
+from .semantic_injector import SemanticInjector
 
 
 class Graph:
@@ -47,11 +48,15 @@ class Graph:
         # Step 1: Render Mermaid to static SVG using headless browser
         static_svg = self._renderer.render_to_svg(self.mermaid_definition)
 
-        # Step 2: Process with animator to add CSS animations
-        animator = SVGAnimator(static_svg)
+        # Step 2: Inject semantic direction metadata
+        injector = SemanticInjector(self.mermaid_definition)
+        svg_with_semantics = injector.inject_metadata(static_svg)
+
+        # Step 3: Process with animator to add CSS animations
+        animator = SVGAnimator(svg_with_semantics)
         animated_svg = animator.process_with_theme(adjusted_theme)
 
-        # Step 3: Save to file if requested
+        # Step 4: Save to file if requested
         if output:
             output_path = Path(output)
             output_path.write_text(animated_svg, encoding="utf-8")

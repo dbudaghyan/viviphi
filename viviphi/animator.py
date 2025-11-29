@@ -21,6 +21,72 @@ class SVGAnimator:
         ET.register_namespace("", "http://www.w3.org/2000/svg")
         self.root = ET.fromstring(static_svg_content)
         self.ns = {"svg": "http://www.w3.org/2000/svg"}
+        self._reversed_markers = set()  # Track created reversed markers
+
+    def _create_reversed_marker(self, marker_id: str) -> None:
+        """Create a reversed version of a marker by flipping its geometry.
+        
+        Args:
+            marker_id: ID of the original marker to reverse
+        """
+        # Avoid creating duplicates
+        reversed_id = f"{marker_id}_reversed"
+        if reversed_id in self._reversed_markers:
+            return
+            
+        # Find the original marker
+        original_marker = self.root.find(f".//svg:defs/svg:marker[@id='{marker_id}']", self.ns)
+        if original_marker is None:
+            return
+            
+        # Create a copy of the original marker
+        reversed_marker = ET.fromstring(ET.tostring(original_marker))
+        reversed_marker.set("id", reversed_id)
+        
+        # Reverse the marker geometry by applying a transformation
+        # For extension arrows, we need to flip them horizontally
+        marker_paths = reversed_marker.findall(".//svg:path", self.ns)
+        for path in marker_paths:
+            d_attr = path.get("d", "")
+            if d_attr:
+                # For extension arrows, flip the path horizontally around x=9.5 (middle of 0-18 range)
+                # This effectively reverses the arrow direction
+                if "extension" in marker_id.lower():
+                    # Parse path and flip coordinates horizontally
+                    import re
+                    # Simple horizontal flip for extension markers - reverse x coordinates around center
+                    flipped_d = self._flip_path_horizontally(d_attr, 18)  # 18 is refX value
+                    path.set("d", flipped_d)
+        
+        # Add the reversed marker to the defs section
+        defs = self.root.find(".//svg:defs", self.ns)
+        if defs is not None:
+            defs.append(reversed_marker)
+            self._reversed_markers.add(reversed_id)
+
+    def _flip_path_horizontally(self, path_d: str, width: float) -> str:
+        """Flip a path horizontally around its center.
+        
+        Args:
+            path_d: SVG path d attribute
+            width: Width to flip around (usually marker width)
+            
+        Returns:
+            Flipped path d attribute
+        """
+        import re
+        
+        # For simple extension markers like "M 1,7 L18,13 V 1 Z"
+        # Flip x coordinates: x_new = width - x_old
+        def flip_coords(match):
+            x = float(match.group(1))
+            y = match.group(2)
+            flipped_x = width - x
+            return f"{flipped_x},{y}"
+        
+        # Replace coordinate pairs (x,y)
+        flipped = re.sub(r'(\d+(?:\.\d+)?),(\d+(?:\.\d+)?)', flip_coords, path_d)
+        return flipped
 
     def _get_css_template(self) -> str:
         """Returns the CSS block for the animations."""
@@ -110,13 +176,50 @@ class SVGAnimator:
                 path_obj = parse_path(d_string)
                 length = path_obj.length()
 
+                # Check semantic direction data to ensure proper animation flow
+                flow_direction = path.get("data-flow-direction", "forward")
+                marker_start = path.get("marker-start", "none")
+                marker_end = path.get("marker-end", "none")
+                
+                # Determine if path needs reversal based on marker placement vs semantic direction
+                needs_reversal = False
+                if flow_direction == "forward":
+                    # Forward flow should have marker at end of path animation
+                    # If marker-start is set (arrow at beginning), path needs reversal
+                    if marker_start != "none" and marker_end == "none":
+                        needs_reversal = True
+                elif flow_direction == "backward":
+                    # Backward flow should have marker at start of path animation  
+                    # If marker-end is set (arrow at end), path needs reversal
+                    if marker_end != "none" and marker_start == "none":
+                        needs_reversal = True
+                
+                if needs_reversal:
+                    # Reverse the path for proper tail-to-tip animation
+                    path_obj = path_obj.reversed()
+                    path.set("d", path_obj.d())
+                    length = path_obj.length()
+                    
+                    # Fix marker orientation by creating reversed marker definitions
+                    if marker_start != "none":
+                        marker_id = marker_start.replace("url(#", "").replace(")", "")
+                        self._create_reversed_marker(marker_id)
+                        marker_start = f"url(#{marker_id}_reversed)"
+                    
+                    if marker_end != "none":
+                        marker_id = marker_end.replace("url(#", "").replace(")", "")
+                        self._create_reversed_marker(marker_id)
+                        marker_end = f"url(#{marker_id}_reversed)"
+                    
+                    # Swap marker attributes to match reversed path
+                    path.set("marker-start", marker_end)
+                    path.set("marker-end", marker_start)
+                    # Update local variables
+                    marker_start, marker_end = marker_end, marker_start
+
                 # Logic: Nodes appear, then lines draw connecting them
                 # Delay based on index to create "waterfall"
                 delay = i * 0.3
-
-                # Store original marker attributes and remove them temporarily
-                marker_start = path.get("marker-start", "none")
-                marker_end = path.get("marker-end", "none")
 
                 existing_style = path.get("style", "")
                 new_style = (
@@ -244,12 +347,49 @@ class SVGAnimator:
                 path_obj = parse_path(d_string)
                 length = path_obj.length()
 
-                # Apply theme-based delay for lines
-                delay = i * theme.stagger_delay
-
-                # Store original marker attributes and remove them temporarily
+                # Check semantic direction data to ensure proper animation flow
+                flow_direction = path.get("data-flow-direction", "forward")
                 marker_start = path.get("marker-start", "none")
                 marker_end = path.get("marker-end", "none")
+                
+                # Determine if path needs reversal based on marker placement vs semantic direction
+                needs_reversal = False
+                if flow_direction == "forward":
+                    # Forward flow should have marker at end of path animation
+                    # If marker-start is set (arrow at beginning), path needs reversal
+                    if marker_start != "none" and marker_end == "none":
+                        needs_reversal = True
+                elif flow_direction == "backward":
+                    # Backward flow should have marker at start of path animation  
+                    # If marker-end is set (arrow at end), path needs reversal
+                    if marker_end != "none" and marker_start == "none":
+                        needs_reversal = True
+                
+                if needs_reversal:
+                    # Reverse the path for proper tail-to-tip animation
+                    path_obj = path_obj.reversed()
+                    path.set("d", path_obj.d())
+                    length = path_obj.length()
+                    
+                    # Fix marker orientation by creating reversed marker definitions
+                    if marker_start != "none":
+                        marker_id = marker_start.replace("url(#", "").replace(")", "")
+                        self._create_reversed_marker(marker_id)
+                        marker_start = f"url(#{marker_id}_reversed)"
+                    
+                    if marker_end != "none":
+                        marker_id = marker_end.replace("url(#", "").replace(")", "")
+                        self._create_reversed_marker(marker_id)
+                        marker_end = f"url(#{marker_id}_reversed)"
+                    
+                    # Swap marker attributes to match reversed path
+                    path.set("marker-start", marker_end)
+                    path.set("marker-end", marker_start)
+                    # Update local variables
+                    marker_start, marker_end = marker_end, marker_start
+
+                # Apply theme-based delay for lines
+                delay = i * theme.stagger_delay
 
                 existing_style = path.get("style", "")
                 new_style = (

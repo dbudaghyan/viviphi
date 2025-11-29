@@ -19,7 +19,7 @@ def animate_mermaid_files():
     }
     
     # Process each .mmd file
-    for mmd_file in samples_dir.glob("*.mmd"):
+    for mmd_file in sorted(samples_dir.glob("*.mmd")):
         if "broken_syntax" in mmd_file.name:
             print(f"Skipping {mmd_file.name} (known broken syntax)")
             continue
