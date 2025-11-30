@@ -26,7 +26,7 @@ class TestBrowserSVGValidation:
         "09_gantt_chart.mmd",
         "10_stress_test.mmd",
         "11_broken_syntax.mmd",
-        "12_interaction_click_events.mmd"
+        "11_interaction_click_events.mmd"
     ])
     def test_svg_loads_in_browser_without_errors(self, samples_dir, mmd_file):
         """Test that generated SVG loads in browser without console errors."""

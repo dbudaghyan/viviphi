@@ -26,7 +26,7 @@ class TestAllSampleGraphs:
         "09_gantt_chart.mmd",
         "10_stress_test.mmd",
         "11_broken_syntax.mmd",
-        "12_interaction_click_events.mmd"
+        "11_interaction_click_events.mmd"
     ])
     def test_individual_graph_rendering(self, samples_dir, mmd_file):
         """Test each graph individually - no skipping, capture all failures."""

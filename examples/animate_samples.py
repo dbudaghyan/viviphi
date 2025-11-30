@@ -38,7 +38,7 @@ def animate_mermaid_files():
                 output_file = output_dir / f"{mmd_file.stem}_{theme_name}.svg"
                 
                 # Create animated SVG
-                animated_svg = graph.animate(
+                graph.animate(
                     theme=theme,
                     speed="normal",
                     output=str(output_file)

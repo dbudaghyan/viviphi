@@ -52,8 +52,6 @@ class SVGAnimator:
                 # For extension arrows, flip the path horizontally around x=9.5 (middle of 0-18 range)
                 # This effectively reverses the arrow direction
                 if "extension" in marker_id.lower():
-                    # Parse path and flip coordinates horizontally
-                    import re
                     # Simple horizontal flip for extension markers - reverse x coordinates around center
                     flipped_d = self._flip_path_horizontally(d_attr, 18)  # 18 is refX value
                     path.set("d", flipped_d)
@@ -217,9 +215,13 @@ class SVGAnimator:
                     # Update local variables
                     marker_start, marker_end = marker_end, marker_start
 
-                # Logic: Nodes appear, then lines draw connecting them
-                # Delay based on index to create "waterfall"
-                delay = i * 0.3
+                # Use semantic animation order if available, otherwise fall back to index
+                animation_order = path.get("data-animation-order")
+                if animation_order is not None:
+                    delay = int(animation_order) * 0.3
+                else:
+                    # Fallback to index-based timing
+                    delay = i * 0.3
 
                 existing_style = path.get("style", "")
                 new_style = (
@@ -388,8 +390,13 @@ class SVGAnimator:
                     # Update local variables
                     marker_start, marker_end = marker_end, marker_start
 
-                # Apply theme-based delay for lines
-                delay = i * theme.stagger_delay
+                # Use semantic animation order if available, otherwise fall back to theme-based delay
+                animation_order = path.get("data-animation-order")
+                if animation_order is not None:
+                    delay = int(animation_order) * theme.stagger_delay
+                else:
+                    # Fallback to index-based timing
+                    delay = i * theme.stagger_delay
 
                 existing_style = path.get("style", "")
                 new_style = (
