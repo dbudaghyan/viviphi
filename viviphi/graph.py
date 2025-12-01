@@ -41,9 +41,9 @@ class Graph:
         speed_multipliers = {"slow": 2.0, "normal": 1.0, "fast": 0.5}
         multiplier = speed_multipliers[speed]
 
-        adjusted_theme = theme.model_copy()
-        adjusted_theme.animation_duration *= multiplier
-        adjusted_theme.stagger_delay *= multiplier
+        adjusted_theme = theme.model_copy(deep=True)
+        adjusted_theme.animation.duration *= multiplier
+        adjusted_theme.animation.stagger_delay *= multiplier
 
         # Step 1: Render Mermaid to static SVG using headless browser
         static_svg = self._renderer.render_to_svg(self.mermaid_definition)
