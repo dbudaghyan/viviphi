@@ -1,0 +1,48 @@
+name: Check Tag on merge to master
+on:
+  pull_request:
+    branches:
+      - master
+
+permissions:
+  contents: write
+
+jobs:
+  tag-validation:
+    name: Tag Validation
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: Check if tag already exists
+        run: |
+          # Ensure the script fails on any error
+          set -e
+
+          # Extract the version from pyproject.toml
+          # This command finds the line 'version = "x.y.z"' and extracts x.y.z
+          VERSION=$(sed -n 's/^\s*version\s*=\s*"\([^"]*\)".*/\1/p' pyproject.toml)
+
+          # Check if the version was found
+          if [ -z "$VERSION" ]; then
+            echo "Error: Could not find version in pyproject.toml"
+            exit 1
+          fi
+
+          # Form the tag name according to best practices (e.g., v1.2.3)
+          TAG_NAME="v$VERSION"
+          echo "Checking for tag: $TAG_NAME"
+
+          # Check if the tag already exists in the remote repository.
+          # The 'git ls-remote' command is more reliable than checking local tags.
+          if git ls-remote --tags origin | grep -q "refs/tags/$TAG_NAME"; then
+            echo "Error: Tag $TAG_NAME already exists."
+            # This exit code will fail the workflow run
+            exit 1
+          else
+            echo "Tag is valid..."
+          fi
