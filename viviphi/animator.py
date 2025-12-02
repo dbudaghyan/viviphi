@@ -68,25 +68,25 @@ class SVGAnimator:
 
     def _is_node_shape_path(self, path) -> bool:
         """Check if path defines a node shape rather than an edge.
-        
+
         Args:
             path: SVG path element
-            
+
         Returns:
             True if path is part of a node shape, False if it's an edge
         """
         # Check if path is inside a node group (not marker) by searching the tree
         # Find all groups and check their IDs
         all_groups = self.root.findall(".//svg:g", self.ns)
-        
+
         for group in all_groups:
-            group_id = group.get('id', '')
-            if group_id.startswith('flowchart-'):
+            group_id = group.get("id", "")
+            if group_id.startswith("flowchart-"):
                 # Check if this path is contained within this node group
                 group_paths = group.findall(".//svg:path", self.ns)
                 if path in group_paths:
                     return True
-                
+
         return False
 
     def _flip_path_horizontally(self, path_d: str, width: float) -> str:
@@ -564,9 +564,9 @@ class SVGAnimator:
             delay = i * theme.stagger_delay * 0.5  # Nodes appear before edges
 
             # More precise skip conditions for complex shapes
-            node_tag = node.tag.split('}')[-1] if '}' in node.tag else node.tag
+            node_tag = node.tag.split("}")[-1] if "}" in node.tag else node.tag
             has_transform = node.get("transform") is not None
-            
+
             # Skip animation for shapes with ANY transform attributes
             # CSS animations with transform properties will override existing transforms
             skip_animation = False
@@ -606,7 +606,7 @@ class SVGAnimator:
             existing_style = path.get("style", "")
             new_style = f"{existing_style}; animation-delay: {delay}s;"
             path.set("style", new_style)
-            
+
             # Apply theme-specific node classes for node shape paths
             if theme.node_style == "glass":
                 path.set("class", "anim-node glass-node")
