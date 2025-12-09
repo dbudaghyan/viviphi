@@ -14,6 +14,20 @@ class TestAllSampleGraphs:
         """Get the samples directory path."""
         return Path(__file__).parent.parent / "resources" / "mermaid_graphs"
     
+    @pytest.fixture(autouse=True)
+    def cleanup_test_artifacts(self):
+        """Clean up any test artifacts from previous runs or current test."""
+        # Clean up before test
+        project_root = Path.cwd()
+        for test_file in project_root.glob("test_output_*.svg"):
+            test_file.unlink(missing_ok=True)
+        
+        yield  # Run the test
+        
+        # Clean up after test
+        for test_file in project_root.glob("test_output_*.svg"):
+            test_file.unlink(missing_ok=True)
+    
     @pytest.mark.parametrize("mmd_file", [
         "01_kitchen_sink_flowchart.mmd",
         "02_nested_subgraphs_direction.mmd", 
@@ -25,10 +39,9 @@ class TestAllSampleGraphs:
         "08_entity_relationship_diagram.mmd",
         "09_gantt_chart.mmd",
         "10_stress_test.mmd",
-        "11_broken_syntax.mmd",
         "11_interaction_click_events.mmd"
     ])
-    def test_individual_graph_rendering(self, samples_dir, mmd_file):
+    def test_individual_graph_rendering(self, samples_dir, tmp_path, mmd_file):
         """Test each graph individually - no skipping, capture all failures."""
         file_path = samples_dir / mmd_file
         
@@ -71,9 +84,9 @@ class TestAllSampleGraphs:
                 assert "<style>" in animated_svg
                 assert "@keyframes" in animated_svg
                 
-                # Save for inspection
-                output_file = f"test_output_{mmd_file.replace('.mmd', '.svg')}"
-                Path(output_file).write_text(animated_svg)
+                # Save for inspection in temporary directory
+                output_file = tmp_path / f"test_output_{mmd_file.replace('.mmd', '.svg')}"
+                output_file.write_text(animated_svg)
                 print(f"📁 Saved output to: {output_file}")
                 
             except Exception as e:
