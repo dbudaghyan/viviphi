@@ -57,7 +57,7 @@ class TestAllSampleGraphs:
         renderer = MermaidRenderer(headless=True)
         try:
             static_svg = renderer.render_to_svg(mermaid_content)
-            print(f"✅ Static SVG generation: SUCCESS")
+            print("✅ Static SVG generation: SUCCESS")
             static_success = True
             
             # Basic SVG validation
@@ -76,7 +76,7 @@ class TestAllSampleGraphs:
             try:
                 graph = Graph(mermaid_content)
                 animated_svg = graph.animate(theme=CYBERPUNK)
-                print(f"✅ Animation processing: SUCCESS")
+                print("✅ Animation processing: SUCCESS")
                 
                 # Validate animated SVG
                 assert animated_svg is not None
@@ -149,14 +149,14 @@ class TestAllSampleGraphs:
             else:
                 failures.append(filename)
         
-        print(f"\n📊 STATISTICS:")
+        print("\n📊 STATISTICS:")
         print(f"   Total files: {len(results)}")
         print(f"   Successes: {len(successes)}")
         print(f"   Failures: {len(failures)}")
         print(f"   Success rate: {len(successes)/len(results)*100:.1f}%")
         
         if failures:
-            print(f"\n🔍 FAILED FILES:")
+            print("\n🔍 FAILED FILES:")
             for filename in failures:
                 print(f"   - {filename}")
         

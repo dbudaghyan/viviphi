@@ -4,6 +4,7 @@
 from pathlib import Path
 from viviphi import (
     Graph,
+    OrderType,
     CYBERPUNK,
     CORPORATE,
     HAND_DRAWN,
@@ -59,7 +60,11 @@ def animate_mermaid_files():
                 output_file = output_dir / f"{mmd_file.stem}_{theme_name}.svg"
 
                 # Create animated SVG
-                graph.animate(theme=theme, speed="normal", output=str(output_file))
+                graph.animate(theme=theme,
+                              speed="normal",
+                              output=str(output_file),
+                              order_type=OrderType.RANDOM
+                              )
 
                 print(f"  ✅ Created {output_file.name}")
 

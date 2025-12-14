@@ -1,6 +1,7 @@
 """Viviphi: Turn static graphs into beautiful animations."""
 
 from .graph import Graph
+from .enums import OrderType
 from .themes import (
     Theme,
     NodeStyling,
@@ -22,6 +23,7 @@ from .themes import (
 
 __all__ = [
     "Graph",
+    "OrderType",
     "Theme",
     "NodeStyling",
     "EdgeStyling",

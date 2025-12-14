@@ -1,6 +1,5 @@
 """Tests for Theme system."""
 
-import pytest
 from viviphi.themes import (
     Theme,
     CYBERPUNK,

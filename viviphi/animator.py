@@ -7,6 +7,8 @@ from svgpathtools import parse_path
 if TYPE_CHECKING:
     from .themes import Theme
 
+from .enums import OrderType
+
 
 class SVGAnimator:
     """Transforms static SVG content into CSS-animated SVG."""
@@ -337,11 +339,12 @@ class SVGAnimator:
 
         return ET.tostring(self.root, encoding="unicode")
 
-    def process_with_theme(self, theme: "Theme") -> str:
+    def process_with_theme(self, theme: "Theme", order_type: OrderType = OrderType.ORDERED) -> str:
         """Process the SVG with a specific theme.
 
         Args:
             theme: Theme object containing styling preferences
+            order_type: How animations are ordered (ORDERED, SEQUENTIAL, or RANDOM)
 
         Returns:
             Animated SVG as string
@@ -423,13 +426,26 @@ class SVGAnimator:
                     # Update local variables
                     marker_start, marker_end = marker_end, marker_start
 
-                # Use semantic animation order if available, otherwise fall back to theme-based delay
-                animation_order = path.get("data-animation-order")
-                if animation_order is not None:
-                    delay = int(animation_order) * theme.stagger_delay
-                else:
-                    # Fallback to index-based timing
+                # Calculate delay based on order type
+                if order_type == OrderType.ORDERED:
+                    # Use semantic ordering based on graph topology
+                    animation_order = path.get("data-animation-order")
+                    if animation_order is not None:
+                        delay = int(animation_order) * theme.stagger_delay
+                    else:
+                        # Fallback to index-based timing
+                        delay = i * theme.stagger_delay
+                elif order_type == OrderType.SEQUENTIAL:
+                    # Use simple index-based sequential timing
                     delay = i * theme.stagger_delay
+                elif order_type == OrderType.RANDOM:
+                    # Random delay between 0 and max sequential delay
+                    import random
+                    max_delay = len(line_paths) * theme.stagger_delay
+                    delay = random.uniform(0, max_delay)
+                else:
+                    # Fallback to simultaneous (shouldn't happen with enum)
+                    delay = 0
 
                 existing_style = path.get("style", "")
                 new_style = (
@@ -475,12 +491,25 @@ class SVGAnimator:
                 path_obj = parse_path(d_string)
                 length = path_obj.length()
 
-                # Arrow tips animate after lines finish
-                # Add extra delay so arrow tips appear after lines are drawn
-                base_line_delay = len(line_paths) * theme.stagger_delay
-                arrow_delay = base_line_delay + (
-                    i * theme.stagger_delay * 0.2
-                )  # Faster stagger for tips
+                # Calculate arrow tip delay based on order type
+                if order_type == OrderType.ORDERED:
+                    # Add extra delay so arrow tips appear after lines are drawn
+                    base_line_delay = len(line_paths) * theme.stagger_delay
+                    arrow_delay = base_line_delay + (
+                        i * theme.stagger_delay * 0.2
+                    )  # Faster stagger for tips
+                elif order_type == OrderType.SEQUENTIAL:
+                    # Sequential timing for arrow tips
+                    base_line_delay = len(line_paths) * theme.stagger_delay
+                    arrow_delay = base_line_delay + (i * theme.stagger_delay * 0.2)
+                elif order_type == OrderType.RANDOM:
+                    # Random delay for arrow tips
+                    import random
+                    max_delay = (len(line_paths) + len(arrow_tip_paths)) * theme.stagger_delay
+                    arrow_delay = random.uniform(0, max_delay)
+                else:
+                    # Fallback to simultaneous
+                    arrow_delay = 0
 
                 existing_style = path.get("style", "")
                 new_style = (
@@ -516,14 +545,30 @@ class SVGAnimator:
         )
 
         for i, element in enumerate(marker_elements):
-            # Arrow tip elements animate after lines and path arrow tips
-            base_delay = (
-                len(line_paths) * theme.stagger_delay
-                + len(arrow_tip_paths) * theme.stagger_delay * 0.2
-            )
-            arrow_delay = base_delay + (
-                i * theme.stagger_delay * 0.1
-            )  # Even faster stagger for non-path tips
+            # Calculate marker element delay based on order type
+            if order_type == OrderType.ORDERED:
+                base_delay = (
+                    len(line_paths) * theme.stagger_delay
+                    + len(arrow_tip_paths) * theme.stagger_delay * 0.2
+                )
+                arrow_delay = base_delay + (
+                    i * theme.stagger_delay * 0.1
+                )  # Even faster stagger for non-path tips
+            elif order_type == OrderType.SEQUENTIAL:
+                # Sequential timing for marker elements
+                base_delay = (
+                    len(line_paths) * theme.stagger_delay
+                    + len(arrow_tip_paths) * theme.stagger_delay * 0.2
+                )
+                arrow_delay = base_delay + (i * theme.stagger_delay * 0.1)
+            elif order_type == OrderType.RANDOM:
+                # Random delay for marker elements
+                import random
+                max_delay = (len(line_paths) + len(arrow_tip_paths) + len(marker_elements)) * theme.stagger_delay
+                arrow_delay = random.uniform(0, max_delay)
+            else:
+                # Fallback to simultaneous
+                arrow_delay = 0
 
             existing_style = element.get("style", "")
             new_style = f"{existing_style}; animation-delay: {arrow_delay}s;"
@@ -561,7 +606,19 @@ class SVGAnimator:
                     nodes.append(element)
 
         for i, node in enumerate(nodes):
-            delay = i * theme.stagger_delay * 0.5  # Nodes appear before edges
+            # Calculate node delay based on order type
+            if order_type == OrderType.ORDERED:
+                delay = i * theme.stagger_delay * 0.5  # Nodes appear before edges
+            elif order_type == OrderType.SEQUENTIAL:
+                delay = i * theme.stagger_delay * 0.5  # Sequential node timing
+            elif order_type == OrderType.RANDOM:
+                # Random delay for nodes
+                import random
+                max_delay = len(nodes) * theme.stagger_delay * 0.5
+                delay = random.uniform(0, max_delay)
+            else:
+                # Fallback to simultaneous
+                delay = 0
 
             # More precise skip conditions for complex shapes
             node_tag = node.tag.split("}")[-1] if "}" in node.tag else node.tag
@@ -602,7 +659,19 @@ class SVGAnimator:
 
         # 4. Process node-defining paths separately (like database shapes)
         for i, path in enumerate(node_shape_paths):
-            delay = i * theme.stagger_delay * 0.5
+            # Calculate node shape path delay based on order type
+            if order_type == OrderType.ORDERED:
+                delay = i * theme.stagger_delay * 0.5
+            elif order_type == OrderType.SEQUENTIAL:
+                delay = i * theme.stagger_delay * 0.5  # Sequential timing
+            elif order_type == OrderType.RANDOM:
+                # Random delay for node shape paths
+                import random
+                max_delay = len(node_shape_paths) * theme.stagger_delay * 0.5
+                delay = random.uniform(0, max_delay)
+            else:
+                # Fallback to simultaneous
+                delay = 0
             existing_style = path.get("style", "")
             new_style = f"{existing_style}; animation-delay: {delay}s;"
             path.set("style", new_style)

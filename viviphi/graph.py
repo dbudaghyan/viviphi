@@ -4,6 +4,7 @@ from typing import Literal, Optional
 from pathlib import Path
 
 from .themes import Theme, CYBERPUNK
+from .enums import OrderType
 from .animator import SVGAnimator
 from .mermaid import MermaidRenderer
 from .semantic_injector import SemanticInjector
@@ -25,6 +26,7 @@ class Graph:
         self,
         theme: Theme = CYBERPUNK,
         speed: Literal["slow", "normal", "fast"] = "normal",
+        order_type: OrderType = OrderType.ORDERED,
         output: Optional[str] = None,
     ) -> str:
         """Generate an animated SVG from the Mermaid definition.
@@ -32,6 +34,7 @@ class Graph:
         Args:
             theme: Visual theme to apply
             speed: Animation speed setting
+            order_type: How animations are ordered (ORDERED, SEQUENTIAL, or RANDOM)
             output: Optional output file path
 
         Returns:
@@ -54,7 +57,7 @@ class Graph:
 
         # Step 3: Process with animator to add CSS animations
         animator = SVGAnimator(svg_with_semantics)
-        animated_svg = animator.process_with_theme(adjusted_theme)
+        animated_svg = animator.process_with_theme(adjusted_theme, order_type=order_type)
 
         # Step 4: Save to file if requested
         if output:

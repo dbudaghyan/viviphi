@@ -1,8 +1,7 @@
 """Integration tests without browser dependencies."""
 
-import pytest
 from unittest.mock import Mock, patch
-from viviphi import Graph, CYBERPUNK
+from viviphi import Graph, CYBERPUNK, OrderType
 
 
 class TestGraphIntegration:
@@ -57,6 +56,35 @@ class TestGraphIntegration:
         # (We can't easily test exact values without parsing CSS, 
         # but we can ensure different outputs)
         assert slow_result != fast_result
+    
+    @patch('viviphi.graph.MermaidRenderer')
+    def test_order_type_parameter(self, mock_renderer_class):
+        """Test that the order_type parameter controls animation timing."""
+        mock_renderer = Mock()
+        mock_svg = """
+        <svg width="400" height="200" xmlns="http://www.w3.org/2000/svg">
+            <path d="M 50 150 L 200 150" stroke="black" fill="none" data-animation-order="1"/>
+            <path d="M 200 150 L 350 150" stroke="black" fill="none" data-animation-order="2"/>
+        </svg>
+        """
+        mock_renderer.render_to_svg.return_value = mock_svg
+        mock_renderer_class.return_value = mock_renderer
+        
+        graph = Graph("graph LR; A --> B --> C")
+        
+        # Test OrderType.ORDERED (semantic order)
+        ordered_result = graph.animate(order_type=OrderType.ORDERED)
+        
+        # Test OrderType.SEQUENTIAL (index-based sequential)
+        sequential_result = graph.animate(order_type=OrderType.SEQUENTIAL)
+        
+        # Test OrderType.RANDOM (random delays)
+        random_result = graph.animate(order_type=OrderType.RANDOM)
+        
+        # All three should produce different results
+        assert ordered_result != sequential_result
+        assert sequential_result != random_result
+        assert ordered_result != random_result
     
     def test_graph_initialization(self):
         """Test Graph initialization."""

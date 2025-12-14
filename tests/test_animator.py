@@ -1,6 +1,5 @@
 """Tests for SVGAnimator class."""
 
-import pytest
 from viviphi.animator import SVGAnimator
 from viviphi.themes import CYBERPUNK, CORPORATE
 

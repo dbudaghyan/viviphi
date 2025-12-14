@@ -151,10 +151,10 @@ class TestBrowserSVGValidation:
                 validation_result = self._validate_in_browser(animated_svg, filename)
                 
                 if validation_result["success"]:
-                    print(f"   ✅ Browser validation: PASSED")
+                    print("   ✅ Browser validation: PASSED")
                     results[filename] = "SUCCESS"
                 else:
-                    print(f"   ❌ Browser validation: FAILED")
+                    print("   ❌ Browser validation: FAILED")
                     print(f"      Errors: {validation_result['errors']}")
                     results[filename] = f"FAILED: {validation_result['errors']}"
                 
