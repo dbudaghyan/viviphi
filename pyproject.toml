@@ -51,6 +51,7 @@ Repository = "https://github.com/viviphi/viviphi.git"
 dev = [
     "pytest>=9.0.1",
     "pytest-asyncio>=1.3.0",
+    "pytest-cov>=6.0.0",
     "ruff>=0.14.7",
     "twine>=6.2.0",
 ]
