@@ -31,6 +31,9 @@ jobs:
         run: uv sync
         shell: bash
 
+      - name: Install Playwright browsers
+        run: uv run playwright install chromium
+
       - name: Run tests and generate coverage report
         run: uv run pytest
         shell: bash
