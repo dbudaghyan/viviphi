@@ -110,6 +110,10 @@ exclude_lines = [
     "raise NotImplementedError"
 ]
 
+[tool.pytest.ini_options]
+addopts = """--cov=viviphi --cov-report=html
+ --cov-report=term-missing --cov-report=xml"""
+
 [[tool.uv.index]]
 name = "testpypi"
 url = "https://test.pypi.org/simple/"
