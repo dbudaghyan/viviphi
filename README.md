@@ -1,20 +1,26 @@
-# 🎬 Viviphi
+<div align="center">
 
-[![GitHub stars](https://img.shields.io/github/stars/dbudaghyan/viviphi.svg?style=for-the-badge)](https://github.com/dbudaghyan/viviphi/stargazers)
-[![GitHub forks](https://img.shields.io/github/forks/dbudaghyan/viviphi.svg?style=for-the-badge)](https://github.com/dbudaghyan/viviphi/network/members)
-[![GitHub issues](https://img.shields.io/github/issues/dbudaghyan/viviphi.svg?style=for-the-badge)](https://github.com/dbudaghyan/viviphi/issues)
-[![GitHub contributors](https://img.shields.io/github/contributors/dbudaghyan/viviphi.svg?style=for-the-badge)](https://github.com/dbudaghyan/viviphi/graphs/contributors)
-[![License](https://img.shields.io/github/license/dbudaghyan/viviphi?label=license&style=for-the-badge)](https://github.com/dbudaghyan/viviphi/blob/master/LICENSE)
-<br />
-[![Build Status](https://img.shields.io/github/actions/workflow/status/dbudaghyan/viviphi/coveralls.yml?style=for-the-badge&logo=python)](https://github.com/dbudaghyan/viviphi/actions)
-[![Coverage Status](https://img.shields.io/coveralls/github/dbudaghyan/viviphi/master.svg?style=for-the-badge)](https://coveralls.io/github/dbudaghyan/viviphi?branch=master)
-[![Last Commit](https://img.shields.io/github/last-commit/dbudaghyan/viviphi.svg?style=for-the-badge)](https://github.com/dbudaghyan/viviphi/commits/master)
-[![Repo Size](https://img.shields.io/github/repo-size/dbudaghyan/viviphi.svg?style=for-the-badge)](https://github.com/dbudaghyan/viviphi)
-[![Python Version](https://img.shields.io/badge/Python-3.13+-blue?style=for-the-badge&logo=python)](https://www.python.org/downloads/)
-<br />
-[![PyPI version](https://img.shields.io/pypi/v/viviphi?style=for-the-badge&logo=pypi)](https://pypi.org/project/viviphi/)
-[![Downloads](https://img.shields.io/pypi/dm/viviphi?style=for-the-badge)](https://pypi.org/project/viviphi/)
-[![PRs Welcome](https://img.shields.io/badge/PRs-welcome-brightgreen.svg?style=for-the-badge)](http://makeapullrequest.com)
+  <h1 align="center">🎬 Viviphi</h1>
+
+  <!-- Project Shields -->
+  <p align="center">
+    <a href="https://github.com/dbudaghyan/viviphi/stargazers"><img src="https://img.shields.io/github/stars/dbudaghyan/viviphi.svg?style=for-the-badge" alt="Stars"></a>
+    <a href="https://github.com/dbudaghyan/viviphi/network/members"><img src="https://img.shields.io/github/forks/dbudaghyan/viviphi.svg?style=for-the-badge" alt="Forks"></a>
+    <a href="https://github.com/dbudaghyan/viviphi/issues"><img src="https://img.shields.io/github/issues/dbudaghyan/viviphi.svg?style=for-the-badge" alt="Issues"></a>
+    <a href="https://github.com/dbudaghyan/viviphi/graphs/contributors"><img src="https://img.shields.io/github/contributors/dbudaghyan/viviphi.svg?style=for-the-badge" alt="Contributors"></a>
+    <a href="https://github.com/dbudaghyan/viviphi/blob/master/LICENSE"><img src="https://img.shields.io/github/license/dbudaghyan/viviphi?label=license&style=for-the-badge" alt="License"></a>
+    <br />
+    <a href="https://github.com/dbudaghyan/viviphi/actions"><img src="https://img.shields.io/github/actions/workflow/status/dbudaghyan/viviphi/coveralls.yml?style=for-the-badge&logo=python" alt="Build Status"></a>
+    <a href="https://coveralls.io/github/dbudaghyan/viviphi?branch=master"><img src="https://img.shields.io/coveralls/github/dbudaghyan/viviphi/master.svg?style=for-the-badge" alt="Coverage Status"></a>
+    <a href="https://github.com/dbudaghyan/viviphi/commits/master"><img src="https://img.shields.io/github/last-commit/dbudaghyan/viviphi.svg?style=for-the-badge" alt="Last Commit"></a>
+    <a href="https://github.com/dbudaghyan/viviphi"><img src="https://img.shields.io/github/repo-size/dbudaghyan/viviphi.svg?style=for-the-badge" alt="Repo Size"></a>
+    <a href="https://www.python.org/downloads/"><img src="https://img.shields.io/badge/Python-3.13+-blue?style=for-the-badge&logo=python" alt="Python Version"></a>
+    <br />
+    <a href="https://pypi.org/project/viviphi/"><img src="https://img.shields.io/pypi/v/viviphi?style=for-the-badge&logo=pypi" alt="PyPI version"></a>
+    <a href="https://pepy.tech/project/viviphi"><img src="https://img.shields.io/pepy/dt/viviphi?style=for-the-badge" alt="Downloads"></a>
+    <a href="http://makeapullrequest.com"><img src="https://img.shields.io/badge/PRs-welcome-brightgreen.svg?style=for-the-badge" alt="PRs Welcome"></a>
+  </p>
+</div>
 
 Turn static graphs into beautiful animations!
 
