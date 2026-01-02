@@ -1,5 +1,15 @@
 # 🎬 Viviphi
 
+[![GitHub stars](https://img.shields.io/github/stars/dbudaghyan/viviphi?style=social)](https://github.com/dbudaghyan/viviphi/stargazers)
+[![GitHub forks](https://img.shields.io/github/forks/dbudaghyan/viviphi?style=social)](https://github.com/dbudaghyan/viviphi/network/members)
+[![GitHub issues](https://img.shields.io/github/issues/dbudaghyan/viviphi)](https://github.com/dbudaghyan/viviphi/issues)
+[![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
+[![Python](https://img.shields.io/badge/python-3.13+-blue.svg)](https://www.python.org/downloads/)
+[![Build Status](https://github.com/dbudaghyan/viviphi/workflows/Tests/badge.svg)](https://github.com/dbudaghyan/viviphi/actions)
+[![Coverage Status](https://coveralls.io/repos/github/dbudaghyan/viviphi/badge.svg?branch=master)](https://coveralls.io/github/dbudaghyan/viviphi?branch=master)
+[![PyPI version](https://badge.fury.io/py/viviphi.svg)](https://badge.fury.io/py/viviphi)
+[![Downloads](https://pepy.tech/badge/viviphi)](https://pepy.tech/project/viviphi)
+
 Turn static graphs into beautiful animations!
 
 Viviphi transforms your Mermaid.js diagrams into stunning animated SVGs with customizable themes and smooth transitions. Perfect for presentations, documentation, or just making your diagrams come alive.
