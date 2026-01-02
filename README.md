@@ -1,6 +1,8 @@
 <div align="center">
 
-  <h1 align="center">🎬 Viviphi</h1>
+  <div align="center">
+    <img src="examples/outputs/viviphi_logo_cyberpunk.svg" alt="Viviphi Logo" width="400">
+  </div>
 
   <!-- Project Shields -->
   <p align="center">
@@ -80,6 +82,8 @@ graph = Graph(mermaid_code)
 graph.animate(theme=CYBERPUNK, output="cyberpunk_graph.svg")
 ```
 
+![Cyberpunk Theme Example](examples/outputs/flowchart_cyberpunk.svg)
+
 ### Corporate 💼
 ```python
 from viviphi import Graph, CORPORATE
@@ -88,6 +92,8 @@ graph = Graph(mermaid_code)
 graph.animate(theme=CORPORATE, output="corporate_graph.svg")
 ```
 
+![Corporate Theme Example](examples/outputs/flowchart_corporate.svg)
+
 ### Hand Drawn ✏️
 ```python
 from viviphi import Graph, HAND_DRAWN
@@ -95,6 +101,8 @@ from viviphi import Graph, HAND_DRAWN
 graph = Graph(mermaid_code)
 graph.animate(theme=HAND_DRAWN, output="hand_drawn_graph.svg")
 ```
+
+![Hand Drawn Theme Example](examples/outputs/flowchart_hand_drawn.svg)
 
 ## ⚡ Animation Speed
 
@@ -136,6 +144,8 @@ sequenceDiagram
     B->>A: Hello Alice
 """
 ```
+
+![Sequence Diagram Example](examples/outputs/sequence_cyberpunk.svg)
 
 ### Class Diagrams
 ```python

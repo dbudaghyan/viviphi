@@ -1,0 +1,157 @@
+<svg xmlns="http://www.w3.org/2000/svg" xmlns:html="http://www.w3.org/1999/xhtml" aria-roledescription="flowchart-v2" role="graphics-document document" viewBox="-8 -8 451.94268798828125 945.6139526367188" style="max-width: 451.94268798828125px;" width="100%" id="mermaid-1765711879416"><style>
+            /* Enhanced Theme CSS - neon edges / glass nodes */
+            
+            /* Root Variables */
+            :root {
+                --primary-color: #00ff99;
+                --secondary-color: #00ff99;
+                --accent-color: #00ff99;
+                --text-color: #ffffff;
+                --background-color: #1a1a1a;
+                --edge-color: #00ff99;
+                --node-fill: #00ff99;
+                --node-border: #00ff99;
+                --font-family: Arial, sans-serif;
+                --font-size: 14.0px;
+                --font-weight: normal;
+            }
+            
+            /* Background Styling */
+            svg {
+                background: #1a1a1a;
+                font-family: var(--font-family);
+                font-size: var(--font-size);
+                font-weight: var(--font-weight);
+            }
+            
+            
+            
+            /* Base Edge Animation */
+            .anim-edge {
+                stroke: var(--edge-color);
+                stroke-width: 2.0px;
+                stroke-dasharray: var(--length);
+                stroke-dashoffset: var(--length);
+                fill: none;
+                opacity: 0.9;
+                animation: draw-flow-with-markers 0.75s ease-out forwards;
+                animation-delay: 0.0s;
+            }
+            
+            /* Edge Style Variations */
+            
+            .neon-glow, .anim-edge.neon {
+                filter: drop-shadow(0 0 5.0px #00ff99) 
+                        drop-shadow(0 0 15.0px #00ff99) 
+                        drop-shadow(0 0 22.5px #00ff99);
+                stroke: #00ff99;
+            }
+            
+            
+            /* Base Node Animation */
+            .anim-node {
+                opacity: 0;
+                animation: fade-in-node 0.5s ease-out forwards;
+                animation-delay: 0.0s;
+            }
+            
+            /* Node Style Variations */
+            
+            .glass-node, .anim-node.glass {
+                fill: rgba(255, 255, 255, 0.1);
+                stroke: #00ff99;
+                stroke-width: 2.0px;
+                backdrop-filter: blur(10px);
+                opacity: 1.0;
+            }
+            
+            .anim-node {
+                filter: drop-shadow(2.0px 2.0px 4.0px rgba(0, 0, 0, 0.3));
+            }
+            
+            
+            /* Animation Keyframes */
+            
+        /* Edge Animation Keyframes */
+        @keyframes draw-flow-with-markers {
+            0% { 
+                stroke-dashoffset: var(--length);
+                marker-start: none;
+                marker-end: none;
+            }
+            99% { 
+                stroke-dashoffset: 0;
+                marker-start: none;
+                marker-end: none;
+            }
+            100% { 
+                stroke-dashoffset: 0;
+                marker-start: var(--marker-start, none);
+                marker-end: var(--marker-end, none);
+            }
+        }
+        
+        /* Node Fade Animation */
+        @keyframes fade-in-node {
+            from { 
+                opacity: 0;
+                transform: scale(0.8);
+            }
+            to { 
+                opacity: 1.0;
+                transform: scale(1);
+            }
+        }
+        
+        /* Complex Shape Fade Animation - preserves existing transforms */
+        @keyframes fade-in-complex-node {
+            from { 
+                opacity: 0;
+            }
+            to { 
+                opacity: 1.0;
+            }
+        }
+        
+        /* Polygon-specific animations that preserve transforms */
+        .anim-node polygon {
+            animation: fade-in-complex-node 0.5s ease-out forwards !important;
+            transform-box: fill-box !important;
+            transform-origin: center !important;
+        }
+        
+        /* Path-specific animations for database shapes */
+        .anim-node path {
+            animation: fade-in-complex-node 0.5s ease-out forwards !important;
+            transform-box: fill-box !important;
+            transform-origin: center !important;
+        }
+        
+        /* Force preserve existing transforms for polygons - disable transform animations completely */
+        .anim-node polygon[transform] {
+            animation: none !important;
+            opacity: 1.0 !important;
+        }
+        
+        /* Also disable for paths with transforms */  
+        .anim-node path[transform] {
+            animation: none !important;
+            opacity: 1.0 !important;
+        }
+        
+        /* Override for simple shapes that don't have transform conflicts */
+        .anim-node rect,
+        .anim-node circle,
+        .anim-node ellipse {
+            animation: fade-in-node 0.5s ease-out forwards;
+        }
+        
+            
+            /* Text Styling */
+            text {
+                fill: var(--text-color);
+                font-family: var(--font-family);
+                font-size: var(--font-size);
+                font-weight: var(--font-weight);
+            }
+        </style><style>#mermaid-1765711879416{font-family:"trebuchet ms",verdana,arial,sans-serif;font-size:16px;fill:#000000;}#mermaid-1765711879416 .error-icon{fill:#ffffff;}#mermaid-1765711879416 .error-text{fill:#000000;stroke:#000000;}#mermaid-1765711879416 .edge-thickness-normal{stroke-width:2px;}#mermaid-1765711879416 .edge-thickness-thick{stroke-width:3.5px;}#mermaid-1765711879416 .edge-pattern-solid{stroke-dasharray:0;}#mermaid-1765711879416 .edge-pattern-dashed{stroke-dasharray:3;}#mermaid-1765711879416 .edge-pattern-dotted{stroke-dasharray:2;}#mermaid-1765711879416 .marker{fill:#000000;stroke:#000000;}#mermaid-1765711879416 .marker.cross{stroke:#000000;}#mermaid-1765711879416 svg{font-family:"trebuchet ms",verdana,arial,sans-serif;font-size:16px;}#mermaid-1765711879416 .label{font-family:"trebuchet ms",verdana,arial,sans-serif;color:#000000;}#mermaid-1765711879416 .cluster-label text{fill:#000000;}#mermaid-1765711879416 .cluster-label span,#mermaid-1765711879416 p{color:#000000;}#mermaid-1765711879416 .label text,#mermaid-1765711879416 span,#mermaid-1765711879416 p{fill:#000000;color:#000000;}#mermaid-1765711879416 .node rect,#mermaid-1765711879416 .node circle,#mermaid-1765711879416 .node ellipse,#mermaid-1765711879416 .node polygon,#mermaid-1765711879416 .node path{fill:#ffffff;stroke:#000000;stroke-width:1px;}#mermaid-1765711879416 .flowchart-label text{text-anchor:middle;}#mermaid-1765711879416 .node .label{text-align:center;}#mermaid-1765711879416 .node.clickable{cursor:pointer;}#mermaid-1765711879416 .arrowheadPath{fill:#0b0b0b;}#mermaid-1765711879416 .edgePath .path{stroke:#000000;stroke-width:2.0px;}#mermaid-1765711879416 .flowchart-link{stroke:#000000;fill:none;}#mermaid-1765711879416 .edgeLabel{background-color:#ffffff;text-align:center;}#mermaid-1765711879416 .edgeLabel rect{opacity:0.5;background-color:#ffffff;fill:#ffffff;}#mermaid-1765711879416 .labelBkg{background-color:rgba(255, 255, 255, 0.5);}#mermaid-1765711879416 .cluster rect{fill:#ffffff;stroke:hsl(0, 0%, 90%);stroke-width:1px;}#mermaid-1765711879416 .cluster text{fill:#000000;}#mermaid-1765711879416 .cluster span,#mermaid-1765711879416 p{color:#000000;}#mermaid-1765711879416 div.mermaidTooltip{position:absolute;text-align:center;max-width:200px;padding:2px;font-family:"trebuchet ms",verdana,arial,sans-serif;font-size:12px;background:#ffffff;border:1px solid hsl(0, 0%, 90%);border-radius:2px;pointer-events:none;z-index:100;}#mermaid-1765711879416 .flowchartTitleText{text-anchor:middle;font-size:18px;fill:#000000;}#mermaid-1765711879416 :root{--mermaid-font-family:"trebuchet ms",verdana,arial,sans-serif;}</style><g><marker orient="auto" markerHeight="12" markerWidth="12" markerUnits="userSpaceOnUse" refY="5" refX="6" viewBox="0 0 10 10" class="marker flowchart" id="mermaid-1765711879416_flowchart-pointEnd"><path style="stroke-width: 1; stroke-dasharray: 1, 0;; --length: 32.36; --glow-color: #00ff99; animation-delay: 1.1701234076732514s;" class="anim-edge neon-glow" d="M 0 0 L 10 5 L 0 10 z" stroke="#00ff99" fill="none" /></marker><marker orient="auto" markerHeight="12" markerWidth="12" markerUnits="userSpaceOnUse" refY="5" refX="4.5" viewBox="0 0 10 10" class="marker flowchart" id="mermaid-1765711879416_flowchart-pointStart"><path style="stroke-width: 1; stroke-dasharray: 1, 0;; --length: 32.36; --glow-color: #00ff99; animation-delay: 0.46512097396790686s;" class="anim-edge neon-glow" d="M 0 5 L 10 10 L 10 0 z" stroke="#00ff99" fill="none" /></marker><marker orient="auto" markerHeight="11" markerWidth="11" markerUnits="userSpaceOnUse" refY="5" refX="11" viewBox="0 0 10 10" class="marker flowchart" id="mermaid-1765711879416_flowchart-circleEnd"><circle style="stroke-width: 1; stroke-dasharray: 1, 0;; animation-delay: 1.2576631651079142s;" class="anim-edge neon-glow" r="5" cy="5" cx="5" /></marker><marker orient="auto" markerHeight="11" markerWidth="11" markerUnits="userSpaceOnUse" refY="5" refX="-1" viewBox="0 0 10 10" class="marker flowchart" id="mermaid-1765711879416_flowchart-circleStart"><circle style="stroke-width: 1; stroke-dasharray: 1, 0;; animation-delay: 0.8870656731614581s;" class="anim-edge neon-glow" r="5" cy="5" cx="5" /></marker><marker orient="auto" markerHeight="11" markerWidth="11" markerUnits="userSpaceOnUse" refY="5.2" refX="12" viewBox="0 0 11 11" class="marker cross flowchart" id="mermaid-1765711879416_flowchart-crossEnd"><path style="stroke-width: 2; stroke-dasharray: 1, 0;; --length: 25.46; --glow-color: #00ff99; animation-delay: 0.23246835744280342s;" class="anim-edge neon-glow" d="M 1,1 l 9,9 M 10,1 l -9,9" stroke="#00ff99" fill="none" /></marker><marker orient="auto" markerHeight="11" markerWidth="11" markerUnits="userSpaceOnUse" refY="5.2" refX="-1" viewBox="0 0 11 11" class="marker cross flowchart" id="mermaid-1765711879416_flowchart-crossStart"><path style="stroke-width: 2; stroke-dasharray: 1, 0;; --length: 25.46; --glow-color: #00ff99; animation-delay: 2.0840311641199945s;" class="anim-edge neon-glow" d="M 1,1 l 9,9 M 10,1 l -9,9" stroke="#00ff99" fill="none" /></marker><g class="root"><g class="clusters" /><g class="edgePaths"><path style="fill:none;; --length: 63.70; --glow-color: #00ff99; --marker-start: none; --marker-end: url(#mermaid-1765711879416_flowchart-pointEnd); animation-delay: 0.9942334882176703s;" class="anim-edge neon-glow" id="L-A-B-0" d="M116.508,34L116.508,39.75C116.508,45.5,116.508,57,116.508,67.617C116.508,78.233,116.508,87.967,116.508,92.833L116.508,97.7" data-flow-direction="forward" data-source-node="B" data-target-node="C" data-edge-type="dependency" data-animation-order="0" stroke="#00ff99" fill="none" /><path style="fill:none;; --length: 45.20; --glow-color: #00ff99; --marker-start: none; --marker-end: url(#mermaid-1765711879416_flowchart-pointEnd); animation-delay: 1.1214784999283964s;" class="anim-edge neon-glow" id="L-B-C-0" d="M116.508,137L116.508,141.167C116.508,145.333,116.508,153.667,116.574,161.2C116.64,168.734,116.772,175.467,116.838,178.834L116.904,182.201" data-flow-direction="forward" data-source-node="K" data-target-node="L" data-edge-type="dependency" data-animation-order="1" stroke="#00ff99" fill="none" /><path style="fill:none;; --length: 104.53; --glow-color: #00ff99; --marker-start: none; --marker-end: url(#mermaid-1765711879416_flowchart-pointEnd); animation-delay: 0.18501389539050245s;" class="anim-edge neon-glow" id="L-C-D-0" d="M84.873,330.88L78.373,341.903C71.873,352.925,58.874,374.971,52.375,390.86C45.875,406.749,45.875,416.482,45.875,421.349L45.875,426.216" data-flow-direction="forward" data-source-node="L" data-target-node="M" data-edge-type="dependency" data-animation-order="2" stroke="#00ff99" fill="none" /><path style="fill:none;; --length: 104.09; --glow-color: #00ff99; --marker-start: none; --marker-end: url(#mermaid-1765711879416_flowchart-pointEnd); animation-delay: 1.2865114534946218s;" class="anim-edge neon-glow" id="L-C-E-0" d="M149.143,330.88L155.476,341.903C161.809,352.925,174.475,374.971,180.808,390.86C187.141,406.749,187.141,416.482,187.141,421.349L187.141,426.216" stroke="#00ff99" fill="none" /><path style="fill:none;stroke-width:2px;stroke-dasharray:3;; --length: 63.70; --glow-color: #00ff99; --marker-start: none; --marker-end: url(#mermaid-1765711879416_flowchart-pointEnd); animation-delay: 0.6950508899201806s;" class="anim-edge neon-glow" id="L-E-F-0" d="M187.141,465.516L187.141,471.266C187.141,477.016,187.141,488.516,187.141,499.132C187.141,509.749,187.141,519.482,187.141,524.349L187.141,529.216" stroke="#00ff99" fill="none" /><path style="stroke-width: 3.5px;fill:none;; --length: 63.70; --glow-color: #00ff99; --marker-start: none; --marker-end: url(#mermaid-1765711879416_flowchart-pointEnd); animation-delay: 0.6250822241711466s;" class="anim-edge neon-glow" id="L-F-G-0" d="M187.141,591.234L187.141,596.984C187.141,602.734,187.141,614.234,187.141,624.851C187.141,635.468,187.141,645.201,187.141,650.068L187.141,654.934" stroke="#00ff99" fill="none" /><path style="fill:none;; --length: 69.50; --glow-color: #00ff99; --marker-start: none; --marker-end: url(#mermaid-1765711879416_flowchart-circleEnd); animation-delay: 0.7226184760408555s;" class="anim-edge neon-glow" id="L-G-H-0" d="M187.141,694.234L187.141,699.984C187.141,705.734,187.141,717.234,187.224,728.818C187.307,740.401,187.474,752.068,187.557,757.901L187.641,763.734" stroke="#00ff99" fill="none" /><path style="fill:none;; --length: 68.50; --glow-color: #00ff99; --marker-start: none; --marker-end: url(#mermaid-1765711879416_flowchart-crossEnd); animation-delay: 0.4392944250655045s;" class="anim-edge neon-glow" id="L-H-I-0" d="M187.641,797.734L187.557,803.401C187.474,809.068,187.307,820.401,187.224,831.818C187.141,843.234,187.141,854.734,187.141,860.484L187.141,866.234" stroke="#00ff99" fill="none" /><path style="fill:none;; --length: 63.70; --glow-color: #00ff99; --marker-start: none; --marker-end: url(#mermaid-1765711879416_flowchart-pointEnd); animation-delay: 1.0563845018506504s;" class="anim-edge neon-glow" id="L-J-K-0" d="M368.305,34.5L368.221,40.167C368.138,45.833,367.971,57.167,367.959,67.783C367.946,78.4,368.088,88.3,368.158,93.25L368.229,98.201" stroke="#00ff99" fill="none" /><path style="fill:none;; --length: 115.46; --glow-color: #00ff99; --marker-start: none; --marker-end: url(#mermaid-1765711879416_flowchart-pointEnd); animation-delay: 1.4108234449816641s;" class="anim-edge neon-glow" id="L-K-L-0" d="M368.305,137.5L368.221,141.583C368.138,145.667,367.971,153.833,367.967,173.076C367.962,192.319,368.12,222.639,368.198,237.798L368.277,252.958" stroke="#00ff99" fill="none" /><path style="fill:none;; --length: 134.46; --glow-color: #00ff99; --marker-start: none; --marker-end: url(#mermaid-1765711879416_flowchart-pointEnd); animation-delay: 0.6743422955522796s;" class="anim-edge neon-glow" id="L-L-M-0" d="M368.305,292.258L368.221,309.717C368.138,327.177,367.971,362.096,367.959,384.506C367.946,406.916,368.088,416.816,368.158,421.766L368.229,426.716" stroke="#00ff99" fill="none" /></g><g class="edgeLabels"><g transform="translate(116.5078125, 68.5)" class="edgeLabel"><g transform="translate(-45.796875, -9.5)" class="label"><foreignObject height="19" width="91.59375"><html:div style="display: inline-block; white-space: nowrap;"><html:span class="edgeLabel">Text on Edge</html:span></html:div></foreignObject></g></g><g class="edgeLabel"><g transform="translate(0, 0)" class="label"><foreignObject height="0" width="0"><html:div style="display: inline-block; white-space: nowrap;"><html:span class="edgeLabel" /></html:div></foreignObject></g></g><g transform="translate(45.875, 397.015625)" class="edgeLabel"><g transform="translate(-14.125, -9.5)" class="label"><foreignObject height="19" width="28.25"><html:div style="display: inline-block; white-space: nowrap;"><html:span class="edgeLabel">One</html:span></html:div></foreignObject></g></g><g transform="translate(187.140625, 397.015625)" class="edgeLabel"><g transform="translate(-13.7890625, -9.5)" class="label"><foreignObject height="19" width="27.578125"><html:div style="display: inline-block; white-space: nowrap;"><html:span class="edgeLabel">Two</html:span></html:div></foreignObject></g></g><g transform="translate(187.140625, 500.015625)" class="edgeLabel"><g transform="translate(-24.3671875, -9.5)" class="label"><foreignObject height="19" width="48.734375"><html:div style="display: inline-block; white-space: nowrap;"><html:span class="edgeLabel">Dotted</html:span></html:div></foreignObject></g></g><g transform="translate(187.140625, 625.734375)" class="edgeLabel"><g transform="translate(-19.296875, -9.5)" class="label"><foreignObject height="19" width="38.59375"><html:div style="display: inline-block; white-space: nowrap;"><html:span class="edgeLabel">Thick</html:span></html:div></foreignObject></g></g><g transform="translate(187.140625, 728.734375)" class="edgeLabel"><g transform="translate(-40.390625, -9.5)" class="label"><foreignObject height="19" width="80.78125"><html:div style="display: inline-block; white-space: nowrap;"><html:span class="edgeLabel">Circle Edge</html:span></html:div></foreignObject></g></g><g transform="translate(187.140625, 831.734375)" class="edgeLabel"><g transform="translate(-38.1953125, -9.5)" class="label"><foreignObject height="19" width="76.390625"><html:div style="display: inline-block; white-space: nowrap;"><html:span class="edgeLabel">Cross Edge</html:span></html:div></foreignObject></g></g><g class="edgeLabel"><g transform="translate(0, 0)" class="label"><foreignObject height="0" width="0"><html:div style="display: inline-block; white-space: nowrap;"><html:span class="edgeLabel" /></html:div></foreignObject></g></g><g class="edgeLabel"><g transform="translate(0, 0)" class="label"><foreignObject height="0" width="0"><html:div style="display: inline-block; white-space: nowrap;"><html:span class="edgeLabel" /></html:div></foreignObject></g></g><g class="edgeLabel"><g transform="translate(0, 0)" class="label"><foreignObject height="0" width="0"><html:div style="display: inline-block; white-space: nowrap;"><html:span class="edgeLabel" /></html:div></foreignObject></g></g></g><g class="nodes"><g transform="translate(116.5078125, 17)" id="flowchart-A-0" class="node default default flowchart-label"><rect height="34" width="141.1875" y="-17" x="-70.59375" ry="0" rx="0" style="; animation-delay: 0.75384657500419s;" class="anim-node glass-node" /><g transform="translate(-63.09375, -9.5)" style="" class="label"><rect style="; animation-delay: 1.4618705773275094s;" class="anim-node glass-node" /><foreignObject height="19" width="126.1875"><html:div style="display: inline-block; white-space: nowrap;"><html:span class="nodeLabel">Rectangular Node</html:span></html:div></foreignObject></g></g><g transform="translate(116.5078125, 120)" id="flowchart-B-1" class="node default default flowchart-label"><rect height="34" width="97.71875" y="-17" x="-48.859375" ry="5" rx="5" style="; animation-delay: 0.5263076902498747s;" class="anim-node glass-node" /><g transform="translate(-41.359375, -9.5)" style="" class="label"><rect style="; animation-delay: 0.24208862024904867s;" class="anim-node glass-node" /><foreignObject height="19" width="82.71875"><html:div style="display: inline-block; white-space: nowrap;"><html:span class="nodeLabel">Round Edge</html:span></html:div></foreignObject></g></g><g transform="translate(116.5078125, 274.7578125)" id="flowchart-C-3" class="node default default flowchart-label"><polygon style="" transform="translate(-87.7578125,87.7578125)" class="glass-node" points="87.7578125,0 175.515625,-87.7578125 87.7578125,-175.515625 0,-87.7578125" /><g transform="translate(-63.2578125, -9.5)" style="" class="label"><rect style="; animation-delay: 1.1054613380424623s;" class="anim-node glass-node" /><foreignObject height="19" width="126.515625"><html:div style="display: inline-block; white-space: nowrap;"><html:span class="nodeLabel">Decision Diamond</html:span></html:div></foreignObject></g></g><g transform="translate(45.875, 448.515625)" id="flowchart-D-5" class="node default default flowchart-label"><rect height="34" width="91.75" y="-17" x="-45.875" ry="0" rx="0" style="; animation-delay: 0.4359910015118028s;" class="anim-node glass-node" /><g transform="translate(-38.375, -9.5)" style="" class="label"><rect style="; animation-delay: 0.47029354435044296s;" class="anim-node glass-node" /><foreignObject height="19" width="76.75"><html:div style="display: inline-block; white-space: nowrap;"><html:span class="nodeLabel">Result One</html:span></html:div></foreignObject></g></g><g transform="translate(187.140625, 448.515625)" id="flowchart-E-7" class="node default default flowchart-label"><rect height="34" width="90.78125" y="-17" x="-45.390625" ry="0" rx="0" style="; animation-delay: 1.7694175716298621s;" class="anim-node glass-node" /><g transform="translate(-37.890625, -9.5)" style="" class="label"><rect style="; animation-delay: 1.3888496962852288s;" class="anim-node glass-node" /><foreignObject height="19" width="75.78125"><html:div style="display: inline-block; white-space: nowrap;"><html:span class="nodeLabel">Result Two</html:span></html:div></foreignObject></g></g><g transform="translate(187.140625, 562.875)" id="flowchart-F-9" class="node default default flowchart-label"><circle height="34" width="56.71875" r="28.359375" ry="0" rx="0" style="; animation-delay: 0.24392203202075774s;" class="anim-node glass-node" /><g transform="translate(-20.859375, -9.5)" style="" class="label"><rect style="; animation-delay: 0.806092442163251s;" class="anim-node glass-node" /><foreignObject height="19" width="41.71875"><html:div style="display: inline-block; white-space: nowrap;"><html:span class="nodeLabel">Circle</html:span></html:div></foreignObject></g></g><g transform="translate(187.140625, 677.234375)" id="flowchart-G-11" class="node default default flowchart-label"><rect height="34" width="81.453125" y="-17" x="-40.7265625" ry="17" rx="17" style="; animation-delay: 1.6500277859643975s;" class="anim-node glass-node" /><g transform="translate(-28.9765625, -9.5)" style="" class="label"><rect style="; animation-delay: 0.561947868243401s;" class="anim-node glass-node" /><foreignObject height="19" width="57.953125"><html:div style="display: inline-block; white-space: nowrap;"><html:span class="nodeLabel">Stadium</html:span></html:div></foreignObject></g></g><g transform="translate(187.140625, 780.234375)" id="flowchart-H-13" class="node default default flowchart-label"><polygon style="" transform="translate(-46.140625,17)" class="glass-node" points="0,0 92.28125,0 92.28125,-34 0,-34 0,0 -8,0 100.28125,0 100.28125,-34 -8,-34 -8,0" /><g transform="translate(-38.640625, -9.5)" style="" class="label"><rect style="; animation-delay: 1.487592487861415s;" class="anim-node glass-node" /><foreignObject height="19" width="77.28125"><html:div style="display: inline-block; white-space: nowrap;"><html:span class="nodeLabel">Subroutine</html:span></html:div></foreignObject></g></g><g transform="translate(187.140625, 897.9241523742676)" id="flowchart-I-15" class="node default default flowchart-label"><path transform="translate(-40.25,-31.68978102189781)" d="M 0,9.793187347931873 a 40.25,9.793187347931873 0,0,0 80.5 0 a 40.25,9.793187347931873 0,0,0 -80.5 0 l 0,43.79318734793188 a 40.25,9.793187347931873 0,0,0 80.5 0 l 0,-43.79318734793188" style="; animation-delay: 0.01917493975846316s;" class="anim-node glass-node" /><g transform="translate(-32.75, -9.5)" style="" class="label"><rect style="; animation-delay: 0.335321916760132s;" class="anim-node glass-node" /><foreignObject height="19" width="65.5"><html:div style="display: inline-block; white-space: nowrap;"><html:span class="nodeLabel">Database</html:span></html:div></foreignObject></g></g><g transform="translate(367.8046875, 17)" id="flowchart-J-16" class="node default default flowchart-label"><polygon style="" transform="translate(-49.5703125,17)" class="glass-node" points="-17,0 99.140625,0 99.140625,-34 -17,-34 0,-17" /><g transform="translate(-42.0703125, -9.5)" style="" class="label"><rect style="; animation-delay: 1.54722172016823s;" class="anim-node glass-node" /><foreignObject height="19" width="84.140625"><html:div style="display: inline-block; white-space: nowrap;"><html:span class="nodeLabel">Asymmetric</html:span></html:div></foreignObject></g></g><g transform="translate(367.8046875, 120)" id="flowchart-K-17" class="node default default flowchart-label"><polygon style="" transform="translate(-46.4921875,17)" class="glass-node" points="8.5,0 84.484375,0 92.984375,-17 84.484375,-34 8.5,-34 0,-17" /><g transform="translate(-30.4921875, -9.5)" style="" class="label"><rect style="; animation-delay: 0.43441146734207486s;" class="anim-node glass-node" /><foreignObject height="19" width="60.984375"><html:div style="display: inline-block; white-space: nowrap;"><html:span class="nodeLabel">Hexagon</html:span></html:div></foreignObject></g></g><g transform="translate(367.8046875, 274.7578125)" id="flowchart-L-19" class="node default default flowchart-label"><polygon style="" transform="translate(-56.8046875,17)" class="glass-node" points="-11.333333333333334,0 107.94270833333333,0 124.94270833333333,-34 5.666666666666667,-34" /><g transform="translate(-49.3046875, -9.5)" style="" class="label"><rect style="; animation-delay: 0.8176689124520791s;" class="anim-node glass-node" /><foreignObject height="19" width="98.609375"><html:div style="display: inline-block; white-space: nowrap;"><html:span class="nodeLabel">Parallelogram</html:span></html:div></foreignObject></g></g><g transform="translate(367.8046875, 448.515625)" id="flowchart-M-21" class="node default default flowchart-label"><polygon style="" transform="translate(-54.375,17)" class="glass-node" points="11.333333333333334,0 114.41666666666667,0 97.41666666666667,-34 -5.666666666666667,-34" /><g transform="translate(-46.875, -9.5)" style="" class="label"><rect style="; animation-delay: 1.6360740898883992s;" class="anim-node glass-node" /><foreignObject height="19" width="93.75"><html:div style="display: inline-block; white-space: nowrap;"><html:span class="nodeLabel">Trapezoid alt</html:span></html:div></foreignObject></g></g></g></g></g></svg>
