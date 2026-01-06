@@ -115,6 +115,60 @@ class SVGAnimator:
         flipped = re.sub(r"(\d+(?:\.\d+)?),(\d+(?:\.\d+)?)", flip_coords, path_d)
         return flipped
 
+    def _hide_all_animatable_elements(self) -> None:
+        """Hide all animatable elements immediately to prevent FOUC.
+        
+        This adds initial styling to prevent flash before CSS animations start.
+        Only hides elements that don't already have transforms or specific styling.
+        """
+        # Get all paths that are not inside markers (edges and node shapes)
+        all_paths = self.root.findall(".//svg:path", self.ns)
+        marker_paths = self.root.findall(".//svg:marker//svg:path", self.ns)
+        marker_path_set = set(marker_paths)
+        
+        animatable_paths = [path for path in all_paths if path not in marker_path_set]
+        
+        # Get all node elements (excluding those inside markers)
+        all_rects = self.root.findall(".//svg:rect", self.ns)
+        all_circles = self.root.findall(".//svg:circle", self.ns) 
+        all_ellipses = self.root.findall(".//svg:ellipse", self.ns)
+        all_polygons = self.root.findall(".//svg:polygon", self.ns)
+        
+        marker_rects = self.root.findall(".//svg:marker//svg:rect", self.ns)
+        marker_circles = self.root.findall(".//svg:marker//svg:circle", self.ns)
+        marker_ellipses = self.root.findall(".//svg:marker//svg:ellipse", self.ns)
+        marker_polygons = self.root.findall(".//svg:marker//svg:polygon", self.ns)
+        
+        marker_elements_set = set(marker_rects + marker_circles + marker_ellipses + marker_polygons)
+        
+        animatable_nodes = []
+        for element_list in [all_rects, all_circles, all_ellipses, all_polygons]:
+            for element in element_list:
+                if element not in marker_elements_set:
+                    animatable_nodes.append(element)
+        
+        # Hide edges by setting initial stroke-dashoffset to hide the line
+        for path in animatable_paths:
+            # Don't hide paths that are part of node shapes or have transforms
+            if not self._is_node_shape_path(path) and not path.get("transform"):
+                existing_style = path.get("style", "")
+                # For edges, we'll rely on CSS animation starting state rather than opacity
+                # This prevents breaking the stroke-dasharray animation
+                pass
+        
+        # Hide nodes that will be animated (but preserve those with transforms)
+        for element in animatable_nodes:
+            # Skip elements that have transforms (like database cylinders) 
+            if not element.get("transform"):
+                existing_style = element.get("style", "")
+                # Add opacity: 0 only to elements without transforms
+                if existing_style:
+                    if "opacity:" not in existing_style:
+                        new_style = f"{existing_style}; opacity: 0"
+                        element.set("style", new_style)
+                else:
+                    element.set("style", "opacity: 0")
+
     def process(self, theme: "Theme", order_type: OrderType = OrderType.ORDERED) -> str:
         """Process the SVG with a specific theme.
 
@@ -129,6 +183,9 @@ class SVGAnimator:
         style_el = ET.Element("style")
         style_el.text = theme.get_css_template()
         self.root.insert(0, style_el)
+
+        # 1.5. Immediately hide all elements that will be animated to prevent FOUC
+        self._hide_all_animatable_elements()
 
         # 2. Process Paths (Edges) - separate line paths from arrow tip paths
         all_paths = self.root.findall(".//svg:path", self.ns)
