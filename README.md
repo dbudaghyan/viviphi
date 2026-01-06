@@ -85,7 +85,7 @@ graph.animate(theme=CYBERPUNK, output="cyberpunk_graph.svg")
 <div align="center">
   <img src="examples/outputs/flowchart_cyberpunk.svg" alt="Cyberpunk Theme Example" width="300">
   <br>
-  <a href="examples/outputs/flowchart_cyberpunk.svg" onclick="this.previousElementSibling.previousElementSibling.src=this.href+'?'+Date.now(); return false;">🔄 Reload</a>
+  <a href="#" onclick="this.previousElementSibling.previousElementSibling.src='examples/outputs/flowchart_cyberpunk.svg?'+Date.now(); return false;">🔄 Reload</a>
 </div>
 
 ### Corporate 💼
@@ -99,7 +99,7 @@ graph.animate(theme=CORPORATE, output="corporate_graph.svg")
 <div align="center">
   <img src="examples/outputs/flowchart_corporate.svg" alt="Corporate Theme Example" width="300">
   <br>
-  <a href="examples/outputs/flowchart_corporate.svg" onclick="this.previousElementSibling.previousElementSibling.src=this.href+'?'+Date.now(); return false;">🔄 Reload</a>
+  <a href="#" onclick="this.previousElementSibling.previousElementSibling.src='examples/outputs/flowchart_corporate.svg?'+Date.now(); return false;">🔄 Reload</a>
 </div>
 
 ### Hand Drawn ✏️
@@ -113,7 +113,7 @@ graph.animate(theme=HAND_DRAWN, output="hand_drawn_graph.svg")
 <div align="center">
   <img src="examples/outputs/flowchart_hand_drawn.svg" alt="Hand Drawn Theme Example" width="300">
   <br>
-  <a href="examples/outputs/flowchart_hand_drawn.svg" onclick="this.previousElementSibling.previousElementSibling.src=this.href+'?'+Date.now(); return false;">🔄 Reload</a>
+  <a href="#" onclick="this.previousElementSibling.previousElementSibling.src='examples/outputs/flowchart_hand_drawn.svg?'+Date.now(); return false;">🔄 Reload</a>
 </div>
 
 ## ⚡ Animation Speed
@@ -160,7 +160,7 @@ sequenceDiagram
 <div align="center">
   <img src="examples/outputs/sequence_cyberpunk.svg" alt="Sequence Diagram Example" width="300">
   <br>
-  <a href="examples/outputs/sequence_cyberpunk.svg" onclick="this.previousElementSibling.previousElementSibling.src=this.href+'?'+Date.now(); return false;">🔄 Reload</a>
+  <a href="#" onclick="this.previousElementSibling.previousElementSibling.src='examples/outputs/sequence_cyberpunk.svg?'+Date.now(); return false;">🔄 Reload</a>
 </div>
 
 ### Class Diagrams
