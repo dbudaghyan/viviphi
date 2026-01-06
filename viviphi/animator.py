@@ -117,7 +117,7 @@ class SVGAnimator:
 
     def _hide_all_animatable_elements(self) -> None:
         """Hide all animatable elements immediately to prevent FOUC.
-        
+
         This adds initial styling to prevent flash before CSS animations start.
         Only hides elements that don't already have transforms or specific styling.
         """
@@ -125,28 +125,30 @@ class SVGAnimator:
         all_paths = self.root.findall(".//svg:path", self.ns)
         marker_paths = self.root.findall(".//svg:marker//svg:path", self.ns)
         marker_path_set = set(marker_paths)
-        
+
         animatable_paths = [path for path in all_paths if path not in marker_path_set]
-        
+
         # Get all node elements (excluding those inside markers)
         all_rects = self.root.findall(".//svg:rect", self.ns)
-        all_circles = self.root.findall(".//svg:circle", self.ns) 
+        all_circles = self.root.findall(".//svg:circle", self.ns)
         all_ellipses = self.root.findall(".//svg:ellipse", self.ns)
         all_polygons = self.root.findall(".//svg:polygon", self.ns)
-        
+
         marker_rects = self.root.findall(".//svg:marker//svg:rect", self.ns)
         marker_circles = self.root.findall(".//svg:marker//svg:circle", self.ns)
         marker_ellipses = self.root.findall(".//svg:marker//svg:ellipse", self.ns)
         marker_polygons = self.root.findall(".//svg:marker//svg:polygon", self.ns)
-        
-        marker_elements_set = set(marker_rects + marker_circles + marker_ellipses + marker_polygons)
-        
+
+        marker_elements_set = set(
+            marker_rects + marker_circles + marker_ellipses + marker_polygons
+        )
+
         animatable_nodes = []
         for element_list in [all_rects, all_circles, all_ellipses, all_polygons]:
             for element in element_list:
                 if element not in marker_elements_set:
                     animatable_nodes.append(element)
-        
+
         # Hide edges by setting initial stroke-dashoffset to hide the line
         for path in animatable_paths:
             # Don't hide paths that are part of node shapes or have transforms
@@ -155,10 +157,10 @@ class SVGAnimator:
                 # For edges, we'll rely on CSS animation starting state rather than opacity
                 # This prevents breaking the stroke-dasharray animation
                 pass
-        
+
         # Hide nodes that will be animated (but preserve those with transforms)
         for element in animatable_nodes:
-            # Skip elements that have transforms (like database cylinders) 
+            # Skip elements that have transforms (like database cylinders)
             if not element.get("transform"):
                 existing_style = element.get("style", "")
                 # Add opacity: 0 only to elements without transforms
@@ -171,22 +173,22 @@ class SVGAnimator:
 
     def _fix_database_alignment(self) -> None:
         """Dynamically fix database cylinder alignment by analyzing the visual structure.
-        
+
         Database nodes should have the text label positioned on the 'wall' of the cylinder,
         not on the top or bottom. This analyzes the cylinder geometry to find the proper
         vertical center and aligns both elements accordingly.
         """
         # Find all database node groups
         all_groups = self.root.findall(".//svg:g", self.ns)
-        
+
         for group in all_groups:
             # Look for database nodes containing both a path (cylinder) and text label
             paths = group.findall(".//svg:path", self.ns)
             labels = group.findall(".//svg:g[@class='label']", self.ns)
-            
+
             if not paths or not labels:
                 continue
-                
+
             for path in paths:
                 path_d = path.get("d", "")
                 # Check if this is a database cylinder (has the characteristic "a" arc commands)
@@ -194,45 +196,71 @@ class SVGAnimator:
                 if "a " in path_d and path.get("transform"):
                     # Extract cylinder geometry from the path data
                     import re
-                    
-                    # Parse the path: M x,y a rx,ry ... l 0,height a rx,ry ... 
-                    path_parts = re.search(r'M\s+([-\d.]+),([-\d.]+)\s+a\s+([-\d.]+),([-\d.]+)[^l]+l\s+0,([-\d.]+)', path_d)
+
+                    # Parse the path: M x,y a rx,ry ... l 0,height a rx,ry ...
+                    path_parts = re.search(
+                        r"M\s+([-\d.]+),([-\d.]+)\s+a\s+([-\d.]+),([-\d.]+)[^l]+l\s+0,([-\d.]+)",
+                        path_d,
+                    )
                     if path_parts:
-                        # Extract cylinder dimensions  
-                        start_y = float(path_parts.group(2))  
+                        # Extract cylinder dimensions
+                        start_y = float(path_parts.group(2))
                         height = float(path_parts.group(5))
-                        
+
                         # Calculate the visual center of the cylinder wall
                         # This should be at the middle of the cylinder height, accounting for the ellipse
                         cylinder_visual_center_y = start_y + (height / 2)
-                        
+
                         # Find the corresponding text label
                         for label in labels:
                             label_transform = label.get("transform", "")
                             path_transform = path.get("transform", "")
-                            
-                            if "translate(" in label_transform and "translate(" in path_transform:
-                                label_match = re.search(r'translate\(([-\d.]+),\s*([-\d.]+)\)', label_transform)
-                                path_match = re.search(r'translate\(([-\d.]+),\s*([-\d.]+)\)', path_transform)
-                                
+
+                            if (
+                                "translate(" in label_transform
+                                and "translate(" in path_transform
+                            ):
+                                label_match = re.search(
+                                    r"translate\(([-\d.]+),\s*([-\d.]+)\)",
+                                    label_transform,
+                                )
+                                path_match = re.search(
+                                    r"translate\(([-\d.]+),\s*([-\d.]+)\)",
+                                    path_transform,
+                                )
+
                                 if label_match and path_match:
-                                    label_x, label_y = float(label_match.group(1)), float(label_match.group(2))
-                                    path_x, path_y = float(path_match.group(1)), float(path_match.group(2))
-                                    
+                                    label_x, label_y = (
+                                        float(label_match.group(1)),
+                                        float(label_match.group(2)),
+                                    )
+                                    path_x, path_y = (
+                                        float(path_match.group(1)),
+                                        float(path_match.group(2)),
+                                    )
+
                                     # Calculate the target Y position for proper alignment
                                     # Text should be at the visual center of the cylinder wall
                                     target_y = path_y + cylinder_visual_center_y
-                                    
+
                                     # Align both elements to the calculated center
-                                    if abs(target_y - label_y) > 1.0:  # Only fix if there's significant misalignment
+                                    if (
+                                        abs(target_y - label_y) > 1.0
+                                    ):  # Only fix if there's significant misalignment
                                         # Move the text label to the cylinder wall center
-                                        new_label_transform = f"translate({label_x}, {target_y})"
+                                        new_label_transform = (
+                                            f"translate({label_x}, {target_y})"
+                                        )
                                         label.set("transform", new_label_transform)
-                                        
+
                                         # Also adjust the cylinder if needed to ensure proper visual alignment
                                         # The cylinder should be positioned so its wall center aligns with text
-                                        cylinder_adjust_y = target_y - cylinder_visual_center_y
-                                        new_path_transform = f"translate({path_x}, {cylinder_adjust_y})"
+                                        cylinder_adjust_y = (
+                                            target_y - cylinder_visual_center_y
+                                        )
+                                        new_path_transform = (
+                                            f"translate({path_x}, {cylinder_adjust_y})"
+                                        )
                                         path.set("transform", new_path_transform)
                                         break
 
