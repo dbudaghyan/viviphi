@@ -105,37 +105,50 @@ class Theme(BaseModel):
         # Convert legacy parameters to new structure
         for legacy_key, (component, attr) in legacy_mappings.items():
             if legacy_key in data:
-                # Ensure component exists
+                legacy_value = data.pop(legacy_key)
+
+                # Ensure component exists with proper isolation
                 if component not in data:
                     if component == "edges":
-                        data[component] = EdgeStyling()
+                        data[component] = {}
                     elif component == "nodes":
-                        data[component] = NodeStyling()
+                        data[component] = {}
                     elif component == "animation":
-                        data[component] = AnimationStyling()
+                        data[component] = {}
 
-                # Set the attribute
-                if hasattr(data[component], attr):
-                    setattr(data[component], attr, data.pop(legacy_key))
-                else:
-                    # If component is a dict (during construction)
-                    if isinstance(data[component], dict):
-                        data[component][attr] = data.pop(legacy_key)
-                    else:  # pragma: no cover
-                        # Create new component with the attribute
-                        component_data = (
-                            data[component].model_dump()
-                            if hasattr(data[component], "model_dump")
-                            else {}
-                        )
-                        component_data[attr] = data.pop(legacy_key)
+                # Set the attribute safely
+                if isinstance(data[component], dict):
+                    data[component][attr] = legacy_value
+                elif hasattr(data[component], attr):
+                    # Create a copy to avoid modifying shared objects
+                    component_data = (
+                        data[component].model_dump()
+                        if hasattr(data[component], "model_dump")
+                        else {}
+                    )
+                    component_data[attr] = legacy_value
 
-                        if component == "edges":  # pragma: no cover
-                            data[component] = EdgeStyling(**component_data)
-                        elif component == "nodes":  # pragma: no cover
-                            data[component] = NodeStyling(**component_data)
-                        elif component == "animation":  # pragma: no cover
-                            data[component] = AnimationStyling(**component_data)
+                    if component == "edges":
+                        data[component] = EdgeStyling(**component_data)
+                    elif component == "nodes":
+                        data[component] = NodeStyling(**component_data)
+                    elif component == "animation":
+                        data[component] = AnimationStyling(**component_data)
+                else:  # pragma: no cover
+                    # Create new component with the attribute
+                    component_data = (
+                        data[component].model_dump()
+                        if hasattr(data[component], "model_dump")
+                        else {}
+                    )
+                    component_data[attr] = legacy_value
+
+                    if component == "edges":  # pragma: no cover
+                        data[component] = EdgeStyling(**component_data)
+                    elif component == "nodes":  # pragma: no cover
+                        data[component] = NodeStyling(**component_data)
+                    elif component == "animation":  # pragma: no cover
+                        data[component] = AnimationStyling(**component_data)
 
         super().__init__(**data)
 
