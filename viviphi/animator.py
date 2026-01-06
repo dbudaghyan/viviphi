@@ -169,6 +169,73 @@ class SVGAnimator:
                 else:
                     element.set("style", "opacity: 0")
 
+    def _fix_database_alignment(self) -> None:
+        """Dynamically fix database cylinder alignment by analyzing the visual structure.
+        
+        Database nodes should have the text label positioned on the 'wall' of the cylinder,
+        not on the top or bottom. This analyzes the cylinder geometry to find the proper
+        vertical center and aligns both elements accordingly.
+        """
+        # Find all database node groups
+        all_groups = self.root.findall(".//svg:g", self.ns)
+        
+        for group in all_groups:
+            # Look for database nodes containing both a path (cylinder) and text label
+            paths = group.findall(".//svg:path", self.ns)
+            labels = group.findall(".//svg:g[@class='label']", self.ns)
+            
+            if not paths or not labels:
+                continue
+                
+            for path in paths:
+                path_d = path.get("d", "")
+                # Check if this is a database cylinder (has the characteristic "a" arc commands)
+                # Database cylinders have: M x,y a rx,ry ... (arc for top ellipse)
+                if "a " in path_d and path.get("transform"):
+                    # Extract cylinder geometry from the path data
+                    import re
+                    
+                    # Parse the path: M x,y a rx,ry ... l 0,height a rx,ry ... 
+                    path_parts = re.search(r'M\s+([-\d.]+),([-\d.]+)\s+a\s+([-\d.]+),([-\d.]+)[^l]+l\s+0,([-\d.]+)', path_d)
+                    if path_parts:
+                        # Extract cylinder dimensions  
+                        start_y = float(path_parts.group(2))  
+                        height = float(path_parts.group(5))
+                        
+                        # Calculate the visual center of the cylinder wall
+                        # This should be at the middle of the cylinder height, accounting for the ellipse
+                        cylinder_visual_center_y = start_y + (height / 2)
+                        
+                        # Find the corresponding text label
+                        for label in labels:
+                            label_transform = label.get("transform", "")
+                            path_transform = path.get("transform", "")
+                            
+                            if "translate(" in label_transform and "translate(" in path_transform:
+                                label_match = re.search(r'translate\(([-\d.]+),\s*([-\d.]+)\)', label_transform)
+                                path_match = re.search(r'translate\(([-\d.]+),\s*([-\d.]+)\)', path_transform)
+                                
+                                if label_match and path_match:
+                                    label_x, label_y = float(label_match.group(1)), float(label_match.group(2))
+                                    path_x, path_y = float(path_match.group(1)), float(path_match.group(2))
+                                    
+                                    # Calculate the target Y position for proper alignment
+                                    # Text should be at the visual center of the cylinder wall
+                                    target_y = path_y + cylinder_visual_center_y
+                                    
+                                    # Align both elements to the calculated center
+                                    if abs(target_y - label_y) > 1.0:  # Only fix if there's significant misalignment
+                                        # Move the text label to the cylinder wall center
+                                        new_label_transform = f"translate({label_x}, {target_y})"
+                                        label.set("transform", new_label_transform)
+                                        
+                                        # Also adjust the cylinder if needed to ensure proper visual alignment
+                                        # The cylinder should be positioned so its wall center aligns with text
+                                        cylinder_adjust_y = target_y - cylinder_visual_center_y
+                                        new_path_transform = f"translate({path_x}, {cylinder_adjust_y})"
+                                        path.set("transform", new_path_transform)
+                                        break
+
     def process(self, theme: "Theme", order_type: OrderType = OrderType.ORDERED) -> str:
         """Process the SVG with a specific theme.
 
@@ -184,7 +251,10 @@ class SVGAnimator:
         style_el.text = theme.get_css_template()
         self.root.insert(0, style_el)
 
-        # 1.5. Immediately hide all elements that will be animated to prevent FOUC
+        # 1.5. Fix database cylinder alignment dynamically
+        self._fix_database_alignment()
+
+        # 1.6. Immediately hide all elements that will be animated to prevent FOUC
         self._hide_all_animatable_elements()
 
         # 2. Process Paths (Edges) - separate line paths from arrow tip paths
