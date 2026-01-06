@@ -51,7 +51,7 @@ uv run playwright install chromium
 ### Basic Usage
 
 ```python
-from viviphi import Graph, CYBERPUNK
+from viviphi import Graph, MANIM_AQUA
 
 # Define your Mermaid graph
 mermaid_code = """
@@ -65,7 +65,7 @@ graph TD
 
 # Create and animate
 graph = Graph(mermaid_code)
-animated_svg = graph.animate(theme=CYBERPUNK, output="my_graph.svg")
+animated_svg = graph.animate(theme=MANIM_AQUA, output="my_graph.svg")
 ```
 
 That's it! Your animated SVG is ready.
@@ -74,28 +74,28 @@ That's it! Your animated SVG is ready.
 
 Viviphi comes with three built-in themes:
 
-### Cyberpunk 🌆
+### Manim Aqua 🌊
 ```python
-from viviphi import Graph, CYBERPUNK
+from viviphi import Graph, MANIM_AQUA
 
 graph = Graph(mermaid_code)
-graph.animate(theme=CYBERPUNK, output="cyberpunk_graph.svg")
+graph.animate(theme=MANIM_AQUA, output="manim_aqua_graph.svg")
 ```
 
 <div align="center">
-  <img src="examples/outputs/flowchart_cyberpunk.svg" alt="Cyberpunk Theme Example" width="300">
+  <img src="examples/outputs/flowchart_manim_aqua.svg" alt="Manim Aqua Theme Example" width="300">
 </div>
 
-### Corporate 💼
+### Gradient Sunset 🌅
 ```python
-from viviphi import Graph, CORPORATE
+from viviphi import Graph, GRADIENT_SUNSET
 
 graph = Graph(mermaid_code)
-graph.animate(theme=CORPORATE, output="corporate_graph.svg")
+graph.animate(theme=GRADIENT_SUNSET, output="gradient_sunset_graph.svg")
 ```
 
 <div align="center">
-  <img src="examples/outputs/flowchart_corporate.svg" alt="Corporate Theme Example" width="300">
+  <img src="examples/outputs/flowchart_gradient_sunset.svg" alt="Gradient Sunset Theme Example" width="300">
 </div>
 
 ### Hand Drawn ✏️
@@ -116,13 +116,13 @@ Control the animation speed with the `speed` parameter:
 
 ```python
 # Slow and dramatic
-graph.animate(theme=CYBERPUNK, speed="slow")
+graph.animate(theme=MANIM_AQUA, speed="slow")
 
 # Default speed
-graph.animate(theme=CYBERPUNK, speed="normal")
+graph.animate(theme=MANIM_AQUA, speed="normal")
 
 # Quick and snappy
-graph.animate(theme=CYBERPUNK, speed="fast")
+graph.animate(theme=MANIM_AQUA, speed="fast")
 ```
 
 ## 📊 Supported Diagram Types
@@ -152,7 +152,7 @@ sequenceDiagram
 ```
 
 <div align="center">
-  <img src="examples/outputs/sequence_cyberpunk.svg" alt="Sequence Diagram Example" width="300">
+  <img src="examples/outputs/sequence_manim_light.svg" alt="Sequence Diagram Example" width="300">
 </div>
 
 ### Class Diagrams
@@ -233,7 +233,7 @@ graph.animate(theme=custom_theme)
 
 ### Documentation Workflow
 ```python
-from viviphi import Graph, CORPORATE
+from viviphi import Graph, GRADIENT_SUNSET
 
 # Load your workflow diagram
 workflow = """
@@ -246,12 +246,12 @@ graph TD
 
 # Generate for docs
 graph = Graph(workflow)
-graph.animate(theme=CORPORATE, speed="normal", output="docs/workflow.svg")
+graph.animate(theme=GRADIENT_SUNSET, speed="normal", output="docs/workflow.svg")
 ```
 
 ### System Architecture
 ```python
-from viviphi import Graph, CYBERPUNK
+from viviphi import Graph, MANIM_AQUA
 
 architecture = """
 graph TB
@@ -273,7 +273,7 @@ graph TB
 """
 
 graph = Graph(architecture)
-graph.animate(theme=CYBERPUNK, output="architecture.svg")
+graph.animate(theme=MANIM_AQUA, output="architecture.svg")
 ```
 
 ## 📁 Project Structure
