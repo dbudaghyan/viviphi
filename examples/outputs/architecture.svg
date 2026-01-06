@@ -1,0 +1,162 @@
+<svg xmlns="http://www.w3.org/2000/svg" xmlns:html="http://www.w3.org/1999/xhtml" aria-roledescription="flowchart-v2" role="graphics-document document" viewBox="-8 -8 305.20703125 434.2179260253906" style="max-width: 305.20703125px;" width="100%" id="mermaid-1767594082515"><style>
+            /* Enhanced Theme CSS - neon edges / glass nodes */
+            
+            /* Root Variables */
+            :root {
+                --primary-color: #00ff99;
+                --secondary-color: #00ff99;
+                --accent-color: #00ff99;
+                --text-color: #ffffff;
+                --background-color: #1a1a1a;
+                --edge-color: #00ff99;
+                --node-fill: #00ff99;
+                --node-border: #00ff99;
+                --font-family: Arial, sans-serif;
+                --font-size: 14.0px;
+                --font-weight: normal;
+            }
+            
+            /* Background Styling */
+            svg {
+                background: #1a1a1a;
+                font-family: var(--font-family);
+                font-size: var(--font-size);
+                font-weight: var(--font-weight);
+            }
+            
+            
+            
+            /* Base Edge Animation */
+            .anim-edge {
+                stroke: var(--edge-color);
+                stroke-width: 2.0px;
+                stroke-dasharray: var(--length);
+                stroke-dashoffset: var(--length);
+                fill: none;
+                opacity: 0.9;
+                animation: draw-flow-with-markers 1.5s ease-out forwards;
+                animation-delay: 0.0s;
+            }
+            
+            /* Edge Style Variations */
+            
+            .neon-glow, .anim-edge.neon {
+                filter: drop-shadow(0 0 5.0px #00ff99) 
+                        drop-shadow(0 0 15.0px #00ff99) 
+                        drop-shadow(0 0 22.5px #00ff99);
+                stroke: #00ff99;
+            }
+            
+            
+            /* Base Node Animation */
+            .anim-node {
+                opacity: 0;
+                animation: fade-in-node 0.5s ease-out forwards;
+                animation-delay: 0.0s;
+            }
+            
+            /* Node Style Variations */
+            
+            .glass-node, .anim-node.glass {
+                fill: rgba(255, 255, 255, 0.1);
+                stroke: #00ff99;
+                stroke-width: 2.0px;
+                backdrop-filter: blur(10px);
+                opacity: 1.0;
+            }
+            
+            .anim-node {
+                filter: drop-shadow(2.0px 2.0px 4.0px rgba(0, 0, 0, 0.3));
+            }
+            
+            
+            /* Animation Keyframes */
+            
+        /* Edge Animation Keyframes */
+        @keyframes draw-flow-with-markers {
+            0% { 
+                stroke-dashoffset: var(--length);
+                marker-start: none;
+                marker-end: none;
+            }
+            99% { 
+                stroke-dashoffset: 0;
+                marker-start: none;
+                marker-end: none;
+            }
+            100% { 
+                stroke-dashoffset: 0;
+                marker-start: var(--marker-start, none);
+                marker-end: var(--marker-end, none);
+            }
+        }
+        
+        /* Node Fade Animation */
+        @keyframes fade-in-node {
+            from { 
+                opacity: 0;
+                transform: scale(0.8);
+            }
+            to { 
+                opacity: 1.0;
+                transform: scale(1);
+            }
+        }
+        
+        /* Complex Shape Fade Animation - preserves existing transforms */
+        @keyframes fade-in-complex-node {
+            from { 
+                opacity: 0;
+            }
+            to { 
+                opacity: 1.0;
+            }
+        }
+        
+        /* Polygon-specific animations that preserve transforms */
+        .anim-node polygon {
+            animation: fade-in-complex-node 0.5s ease-out forwards !important;
+            transform-box: fill-box !important;
+            transform-origin: center !important;
+        }
+        
+        /* Path-specific animations for database shapes */
+        .anim-node path {
+            animation: fade-in-complex-node 0.5s ease-out forwards !important;
+            transform-box: fill-box !important;
+            transform-origin: center !important;
+        }
+        
+        /* Force preserve existing transforms for polygons - disable transform animations completely */
+        .anim-node polygon[transform] {
+            animation: none !important;
+            opacity: 1.0 !important;
+        }
+        
+        /* Also disable for paths with transforms */  
+        .anim-node path[transform] {
+            animation: none !important;
+            opacity: 1.0 !important;
+        }
+        
+        /* Fix database cylinder alignment - force Y coordinate to match text label */
+        path[transform*="translate(-40.25,"] {
+            transform: translate(-40.25px, -9.5px) !important;
+        }
+        
+        /* Override for simple shapes that don't have transform conflicts */
+        .anim-node rect,
+        .anim-node circle,
+        .anim-node ellipse {
+            animation: fade-in-node 0.5s ease-out forwards;
+        }
+        
+            
+            /* Text Styling */
+            text {
+                fill: var(--text-color);
+                font-family: var(--font-family);
+                font-size: var(--font-size);
+                font-weight: var(--font-weight);
+            }
+        </style><style>#mermaid-1767594082515{font-family:"trebuchet ms",verdana,arial,sans-serif;font-size:16px;fill:#000000;}#mermaid-1767594082515 .error-icon{fill:#ffffff;}#mermaid-1767594082515 .error-text{fill:#000000;stroke:#000000;}#mermaid-1767594082515 .edge-thickness-normal{stroke-width:2px;}#mermaid-1767594082515 .edge-thickness-thick{stroke-width:3.5px;}#mermaid-1767594082515 .edge-pattern-solid{stroke-dasharray:0;}#mermaid-1767594082515 .edge-pattern-dashed{stroke-dasharray:3;}#mermaid-1767594082515 .edge-pattern-dotted{stroke-dasharray:2;}#mermaid-1767594082515 .marker{fill:#000000;stroke:#000000;}#mermaid-1767594082515 .marker.cross{stroke:#000000;}#mermaid-1767594082515 svg{font-family:"trebuchet ms",verdana,arial,sans-serif;font-size:16px;}#mermaid-1767594082515 .label{font-family:"trebuchet ms",verdana,arial,sans-serif;color:#000000;}#mermaid-1767594082515 .cluster-label text{fill:#000000;}#mermaid-1767594082515 .cluster-label span,#mermaid-1767594082515 p{color:#000000;}#mermaid-1767594082515 .label text,#mermaid-1767594082515 span,#mermaid-1767594082515 p{fill:#000000;color:#000000;}#mermaid-1767594082515 .node rect,#mermaid-1767594082515 .node circle,#mermaid-1767594082515 .node ellipse,#mermaid-1767594082515 .node polygon,#mermaid-1767594082515 .node path{fill:#ffffff;stroke:#000000;stroke-width:1px;}#mermaid-1767594082515 .flowchart-label text{text-anchor:middle;}#mermaid-1767594082515 .node .label{text-align:center;}#mermaid-1767594082515 .node.clickable{cursor:pointer;}#mermaid-1767594082515 .arrowheadPath{fill:#0b0b0b;}#mermaid-1767594082515 .edgePath .path{stroke:#000000;stroke-width:2.0px;}#mermaid-1767594082515 .flowchart-link{stroke:#000000;fill:none;}#mermaid-1767594082515 .edgeLabel{background-color:#ffffff;text-align:center;}#mermaid-1767594082515 .edgeLabel rect{opacity:0.5;background-color:#ffffff;fill:#ffffff;}#mermaid-1767594082515 .labelBkg{background-color:rgba(255, 255, 255, 0.5);}#mermaid-1767594082515 .cluster rect{fill:#ffffff;stroke:hsl(0, 0%, 90%);stroke-width:1px;}#mermaid-1767594082515 .cluster text{fill:#000000;}#mermaid-1767594082515 .cluster span,#mermaid-1767594082515 p{color:#000000;}#mermaid-1767594082515 div.mermaidTooltip{position:absolute;text-align:center;max-width:200px;padding:2px;font-family:"trebuchet ms",verdana,arial,sans-serif;font-size:12px;background:#ffffff;border:1px solid hsl(0, 0%, 90%);border-radius:2px;pointer-events:none;z-index:100;}#mermaid-1767594082515 .flowchartTitleText{text-anchor:middle;font-size:18px;fill:#000000;}#mermaid-1767594082515 :root{--mermaid-font-family:"trebuchet ms",verdana,arial,sans-serif;}</style><g><marker orient="auto" markerHeight="12" markerWidth="12" markerUnits="userSpaceOnUse" refY="5" refX="6" viewBox="0 0 10 10" class="marker flowchart" id="mermaid-1767594082515_flowchart-pointEnd"><path style="stroke-width: 1; stroke-dasharray: 1, 0;; --length: 32.36; --glow-color: #00ff99; animation-delay: 1.2s;" class="anim-edge neon-glow" d="M 0 0 L 10 5 L 0 10 z" stroke="#00ff99" fill="none" /></marker><marker orient="auto" markerHeight="12" markerWidth="12" markerUnits="userSpaceOnUse" refY="5" refX="4.5" viewBox="0 0 10 10" class="marker flowchart" id="mermaid-1767594082515_flowchart-pointStart"><path style="stroke-width: 1; stroke-dasharray: 1, 0;; --length: 32.36; --glow-color: #00ff99; animation-delay: 1.26s;" class="anim-edge neon-glow" d="M 0 5 L 10 10 L 10 0 z" stroke="#00ff99" fill="none" /></marker><marker orient="auto" markerHeight="11" markerWidth="11" markerUnits="userSpaceOnUse" refY="5" refX="11" viewBox="0 0 10 10" class="marker flowchart" id="mermaid-1767594082515_flowchart-circleEnd"><circle style="stroke-width: 1; stroke-dasharray: 1, 0;; animation-delay: 1.44s;" class="anim-edge neon-glow" r="5" cy="5" cx="5" /></marker><marker orient="auto" markerHeight="11" markerWidth="11" markerUnits="userSpaceOnUse" refY="5" refX="-1" viewBox="0 0 10 10" class="marker flowchart" id="mermaid-1767594082515_flowchart-circleStart"><circle style="stroke-width: 1; stroke-dasharray: 1, 0;; animation-delay: 1.47s;" class="anim-edge neon-glow" r="5" cy="5" cx="5" /></marker><marker orient="auto" markerHeight="11" markerWidth="11" markerUnits="userSpaceOnUse" refY="5.2" refX="12" viewBox="0 0 11 11" class="marker cross flowchart" id="mermaid-1767594082515_flowchart-crossEnd"><path style="stroke-width: 2; stroke-dasharray: 1, 0;; --length: 25.46; --glow-color: #00ff99; animation-delay: 1.3199999999999998s;" class="anim-edge neon-glow" d="M 1,1 l 9,9 M 10,1 l -9,9" stroke="#00ff99" fill="none" /></marker><marker orient="auto" markerHeight="11" markerWidth="11" markerUnits="userSpaceOnUse" refY="5.2" refX="-1" viewBox="0 0 11 11" class="marker cross flowchart" id="mermaid-1767594082515_flowchart-crossStart"><path style="stroke-width: 2; stroke-dasharray: 1, 0;; --length: 25.46; --glow-color: #00ff99; animation-delay: 1.38s;" class="anim-edge neon-glow" d="M 1,1 l 9,9 M 10,1 l -9,9" stroke="#00ff99" fill="none" /></marker><g class="root"><g class="clusters"><g id="subGraph1" class="cluster default flowchart-label"><rect height="200.21793365478516" width="289.20703125" y="218" x="0" ry="0" rx="0" style="; animation-delay: 0.0s;" class="anim-node glass-node" /><g transform="translate(114.681640625, 218)" class="cluster-label"><foreignObject height="19" width="59.84375"><html:div style="display: inline-block; white-space: nowrap;"><html:span class="nodeLabel">Backend</html:span></html:div></foreignObject></g></g><g id="Frontend" class="cluster default flowchart-label"><rect height="168" width="156.265625" y="0" x="71.69921875" ry="0" rx="0" style="; animation-delay: 0.15s;" class="anim-node glass-node" /><g transform="translate(117.49609375, 0)" class="cluster-label"><foreignObject height="19" width="64.671875"><html:div style="display: inline-block; white-space: nowrap;"><html:span class="nodeLabel">Frontend</html:span></html:div></foreignObject></g></g></g><g class="edgePaths"><path style="fill:none;; --length: 44.70; --glow-color: #00ff99; --marker-start: none; --marker-end: url(#mermaid-1767594082515_flowchart-pointEnd); animation-delay: 0.0s;" class="anim-edge neon-glow" id="L-UI-API-0" d="M149.832,59L149.832,63.167C149.832,67.333,149.832,75.667,149.832,83.117C149.832,90.567,149.832,97.133,149.832,100.417L149.832,103.7" data-flow-direction="forward" data-source-node="UI" data-target-node="API" data-edge-type="dependency" data-animation-order="0" stroke="#00ff99" fill="none" /><path style="fill:none;; --length: 94.70; --glow-color: #00ff99; --marker-start: none; --marker-end: url(#mermaid-1767594082515_flowchart-pointEnd); animation-delay: 0.3s;" class="anim-edge neon-glow" id="L-API-SERVER-0" d="M149.832,143L149.832,147.167C149.832,151.333,149.832,159.667,149.832,168C149.832,176.333,149.832,184.667,149.832,193C149.832,201.333,149.832,209.667,149.832,217.117C149.832,224.567,149.832,231.133,149.832,234.417L149.832,237.7" data-flow-direction="forward" data-source-node="API" data-target-node="SERVER" data-edge-type="dependency" data-animation-order="1" stroke="#00ff99" fill="none" /><path style="fill:none;; --length: 61.11; --glow-color: #00ff99; --marker-start: none; --marker-end: url(#mermaid-1767594082515_flowchart-pointEnd); animation-delay: 0.6s;" class="anim-edge neon-glow" id="L-SERVER-DB-0" d="M124.887,277L118.773,281.167C112.659,285.333,100.431,293.667,94.317,301.117C88.203,308.567,88.203,315.133,88.203,318.417L88.203,321.7" data-flow-direction="forward" data-source-node="SERVER" data-target-node="DB" data-edge-type="dependency" data-animation-order="2" stroke="#00ff99" fill="none" /><path style="fill:none;; --length: 65.72; --glow-color: #00ff99; --marker-start: none; --marker-end: url(#mermaid-1767594082515_flowchart-pointEnd); animation-delay: 0.8999999999999999s;" class="anim-edge neon-glow" id="L-SERVER-CACHE-0" d="M174.777,277L180.891,281.167C187.005,285.333,199.233,293.667,205.347,301.957C211.461,310.248,211.461,318.495,211.461,322.619L211.461,326.743" data-flow-direction="forward" data-source-node="SERVER" data-target-node="CACHE" data-edge-type="dependency" data-animation-order="3" stroke="#00ff99" fill="none" /></g><g class="edgeLabels"><g class="edgeLabel"><g transform="translate(0, 0)" class="label"><foreignObject height="0" width="0"><html:div style="display: inline-block; white-space: nowrap;"><html:span class="edgeLabel" /></html:div></foreignObject></g></g><g class="edgeLabel"><g transform="translate(0, 0)" class="label"><foreignObject height="0" width="0"><html:div style="display: inline-block; white-space: nowrap;"><html:span class="edgeLabel" /></html:div></foreignObject></g></g><g class="edgeLabel"><g transform="translate(0, 0)" class="label"><foreignObject height="0" width="0"><html:div style="display: inline-block; white-space: nowrap;"><html:span class="edgeLabel" /></html:div></foreignObject></g></g><g class="edgeLabel"><g transform="translate(0, 0)" class="label"><foreignObject height="0" width="0"><html:div style="display: inline-block; white-space: nowrap;"><html:span class="edgeLabel" /></html:div></foreignObject></g></g></g><g class="nodes"><g transform="translate(149.83203125, 260)" id="flowchart-SERVER-2" class="node default default flowchart-label"><rect height="34" width="118.640625" y="-17" x="-59.3203125" ry="0" rx="0" style="; animation-delay: 0.3s;" class="anim-node glass-node" /><g transform="translate(-51.8203125, -9.5)" style="" class="label"><rect style="; animation-delay: 0.44999999999999996s;" class="anim-node glass-node" /><foreignObject height="19" width="103.640625"><html:div style="display: inline-block; white-space: nowrap;"><html:span class="nodeLabel">Express Server</html:span></html:div></foreignObject></g></g><g transform="translate(88.203125, 360.1089668273926)" id="flowchart-DB-3" class="node default default flowchart-label"><path transform="translate(-47.0859375,-33.11267555428816)" d="M 0,10.741783702858772 a 47.0859375,10.741783702858772 0,0,0 94.171875 0 a 47.0859375,10.741783702858772 0,0,0 -94.171875 0 l 0,44.74178370285877 a 47.0859375,10.741783702858772 0,0,0 94.171875 0 l 0,-44.74178370285877" style="" class="glass-node" /><g transform="translate(-39.5859375, -9.5)" style="" class="label"><rect style="; animation-delay: 0.6s;" class="anim-node glass-node" /><foreignObject height="19" width="79.171875"><html:div style="display: inline-block; white-space: nowrap;"><html:span class="nodeLabel">PostgreSQL</html:span></html:div></foreignObject></g></g><g transform="translate(211.4609375, 360.1089668273926)" id="flowchart-CACHE-4" class="node default default flowchart-label"><path transform="translate(-26.171875,-28.06828193832599)" d="M 0,7.378854625550661 a 26.171875,7.378854625550661 0,0,0 52.34375 0 a 26.171875,7.378854625550661 0,0,0 -52.34375 0 l 0,41.37885462555066 a 26.171875,7.378854625550661 0,0,0 52.34375 0 l 0,-41.37885462555066" style="" class="glass-node" /><g transform="translate(-18.671875, -9.5)" style="" class="label"><rect style="; animation-delay: 0.75s;" class="anim-node glass-node" /><foreignObject height="19" width="37.34375"><html:div style="display: inline-block; white-space: nowrap;"><html:span class="nodeLabel">Redis</html:span></html:div></foreignObject></g></g><g transform="translate(149.83203125, 42)" id="flowchart-UI-0" class="node default default flowchart-label"><rect height="34" width="86.265625" y="-17" x="-43.1328125" ry="0" rx="0" style="; animation-delay: 0.8999999999999999s;" class="anim-node glass-node" /><g transform="translate(-35.6328125, -9.5)" style="" class="label"><rect style="; animation-delay: 1.05s;" class="anim-node glass-node" /><foreignObject height="19" width="71.265625"><html:div style="display: inline-block; white-space: nowrap;"><html:span class="nodeLabel">React App</html:span></html:div></foreignObject></g></g><g transform="translate(149.83203125, 126)" id="flowchart-API-1" class="node default default flowchart-label"><rect height="34" width="85.296875" y="-17" x="-42.6484375" ry="0" rx="0" style="; animation-delay: 1.2s;" class="anim-node glass-node" /><g transform="translate(-35.1484375, -9.5)" style="" class="label"><rect style="; animation-delay: 1.3499999999999999s;" class="anim-node glass-node" /><foreignObject height="19" width="70.296875"><html:div style="display: inline-block; white-space: nowrap;"><html:span class="nodeLabel">API Client</html:span></html:div></foreignObject></g></g></g></g></g></svg>

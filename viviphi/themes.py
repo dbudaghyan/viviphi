@@ -533,6 +533,11 @@ class Theme(BaseModel):
             opacity: {self.nodes.opacity} !important;
         }}
         
+        /* Fix database cylinder alignment - force Y coordinate to match text label */
+        path[transform*="translate(-40.25,"] {{
+            transform: translate(-40.25px, -9.5px) !important;
+        }}
+        
         /* Override for simple shapes that don't have transform conflicts */
         .anim-node rect,
         .anim-node circle,
