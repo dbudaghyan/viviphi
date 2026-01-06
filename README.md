@@ -82,7 +82,11 @@ graph = Graph(mermaid_code)
 graph.animate(theme=CYBERPUNK, output="cyberpunk_graph.svg")
 ```
 
-![Cyberpunk Theme Example](examples/outputs/flowchart_cyberpunk.svg)
+<div align="center">
+  <img src="examples/outputs/flowchart_cyberpunk.svg" alt="Cyberpunk Theme Example" width="300">
+  <br>
+  <a href="examples/outputs/flowchart_cyberpunk.svg" onclick="this.previousElementSibling.previousElementSibling.src=this.href+'?'+Date.now(); return false;">🔄 Reload</a>
+</div>
 
 ### Corporate 💼
 ```python
@@ -92,7 +96,11 @@ graph = Graph(mermaid_code)
 graph.animate(theme=CORPORATE, output="corporate_graph.svg")
 ```
 
-![Corporate Theme Example](examples/outputs/flowchart_corporate.svg)
+<div align="center">
+  <img src="examples/outputs/flowchart_corporate.svg" alt="Corporate Theme Example" width="300">
+  <br>
+  <a href="examples/outputs/flowchart_corporate.svg" onclick="this.previousElementSibling.previousElementSibling.src=this.href+'?'+Date.now(); return false;">🔄 Reload</a>
+</div>
 
 ### Hand Drawn ✏️
 ```python
@@ -102,7 +110,11 @@ graph = Graph(mermaid_code)
 graph.animate(theme=HAND_DRAWN, output="hand_drawn_graph.svg")
 ```
 
-![Hand Drawn Theme Example](examples/outputs/flowchart_hand_drawn.svg)
+<div align="center">
+  <img src="examples/outputs/flowchart_hand_drawn.svg" alt="Hand Drawn Theme Example" width="300">
+  <br>
+  <a href="examples/outputs/flowchart_hand_drawn.svg" onclick="this.previousElementSibling.previousElementSibling.src=this.href+'?'+Date.now(); return false;">🔄 Reload</a>
+</div>
 
 ## ⚡ Animation Speed
 
@@ -145,7 +157,11 @@ sequenceDiagram
 """
 ```
 
-![Sequence Diagram Example](examples/outputs/sequence_cyberpunk.svg)
+<div align="center">
+  <img src="examples/outputs/sequence_cyberpunk.svg" alt="Sequence Diagram Example" width="300">
+  <br>
+  <a href="examples/outputs/sequence_cyberpunk.svg" onclick="this.previousElementSibling.previousElementSibling.src=this.href+'?'+Date.now(); return false;">🔄 Reload</a>
+</div>
 
 ### Class Diagrams
 ```python
