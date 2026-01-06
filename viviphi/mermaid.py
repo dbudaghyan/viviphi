@@ -33,11 +33,41 @@ class MermaidRenderer:
             page = browser.new_page()
 
             try:
+                # Capture console messages to detect Mermaid errors
+                console_messages = []
+                page.on(
+                    "console",
+                    lambda msg: console_messages.append(f"{msg.type}: {msg.text}"),
+                )
+
                 # Load the HTML with Mermaid
                 page.set_content(html_template)
 
-                # Wait for Mermaid to render
-                page.wait_for_selector("#mermaid-output svg", timeout=10000)
+                # Wait for either success or error state with increased timeout
+                try:
+                    # Check if SVG was rendered successfully
+                    page.wait_for_selector("#mermaid-output svg", timeout=15000)
+                except Exception:
+                    # If SVG didn't render, check for error state
+                    try:
+                        page.wait_for_selector("#mermaid-error", timeout=2000)
+                        error_msg = page.evaluate(
+                            "document.querySelector('#mermaid-error').textContent"
+                        )
+                        raise RuntimeError(f"Mermaid rendering failed: {error_msg}")
+                    except Exception:
+                        # Check console for errors
+                        error_logs = [
+                            msg for msg in console_messages if "error" in msg.lower()
+                        ]
+                        if error_logs:
+                            raise RuntimeError(
+                                f"Mermaid rendering failed with errors: {'; '.join(error_logs)}"
+                            )
+                        else:
+                            raise RuntimeError(
+                                "Mermaid rendering timed out without clear error indication"
+                            )
 
                 # Extract the SVG content
                 svg_content = page.evaluate("""() => {
@@ -62,6 +92,8 @@ class MermaidRenderer:
         Returns:
             Complete HTML page content
         """
+        # Don't escape - let Mermaid handle the content directly but use a safer approach
+        # with JavaScript to set the content to avoid injection
         return f"""
         <!DOCTYPE html>
         <html lang="en">
@@ -69,26 +101,54 @@ class MermaidRenderer:
             <meta charset="UTF-8">
             <meta name="viewport" content="width=device-width, initial-scale=1.0">
             <title>Mermaid Renderer</title>
-            <script src="https://cdn.jsdelivr.net/npm/mermaid@10.6.1/dist/mermaid.min.js"></script>
+            <script src="https://cdn.jsdelivr.net/npm/mermaid@10.9.1/dist/mermaid.min.js"></script>
         </head>
         <body>
-            <div id="mermaid-output">
-                <pre class="mermaid">{mermaid_definition}</pre>
-            </div>
+            <div id="mermaid-output"></div>
+            <div id="mermaid-error" style="display: none; color: red;"></div>
             
             <script>
-                mermaid.initialize({{
-                    startOnLoad: true,
-                    theme: 'base',
-                    themeVariables: {{
-                        primaryColor: '#ffffff',
-                        primaryTextColor: '#000000',
-                        primaryBorderColor: '#000000',
-                        lineColor: '#000000',
-                        secondaryColor: '#ffffff',
-                        tertiaryColor: '#ffffff'
-                    }}
-                }});
+                const mermaidDefinition = {repr(mermaid_definition)};
+                
+                try {{
+                    mermaid.initialize({{
+                        startOnLoad: false,
+                        theme: 'base',
+                        themeVariables: {{
+                            primaryColor: '#ffffff',
+                            primaryTextColor: '#000000',
+                            primaryBorderColor: '#000000',
+                            lineColor: '#000000',
+                            secondaryColor: '#ffffff',
+                            tertiaryColor: '#ffffff'
+                        }},
+                        // Better Unicode and special character support
+                        securityLevel: 'loose',
+                        htmlLabels: true,
+                        fontFamily: 'Arial, sans-serif'
+                    }});
+                    
+                    // Render the diagram
+                    mermaid.run({{
+                        querySelector: '.mermaid'
+                    }});
+                    
+                    // Set the content after initialization
+                    const outputDiv = document.getElementById('mermaid-output');
+                    const preElement = document.createElement('pre');
+                    preElement.className = 'mermaid';
+                    preElement.textContent = mermaidDefinition;
+                    outputDiv.appendChild(preElement);
+                    
+                    // Re-run mermaid on the new content
+                    mermaid.run();
+                    
+                }} catch(error) {{
+                    console.error('Mermaid error:', error);
+                    const errorDiv = document.getElementById('mermaid-error');
+                    errorDiv.style.display = 'block';
+                    errorDiv.textContent = 'Error: ' + error.toString();
+                }}
             </script>
         </body>
         </html>

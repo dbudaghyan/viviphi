@@ -1,5 +1,6 @@
 """Tests for Theme system."""
 
+import unittest
 from viviphi.themes import (
     Theme,
     CYBERPUNK,
@@ -13,7 +14,7 @@ from viviphi.themes import (
 )
 
 
-class TestTheme:
+class TestTheme(unittest.TestCase):
     """Test Theme functionality."""
 
     def test_default_theme_creation(self):

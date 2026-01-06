@@ -1,10 +1,11 @@
 """Integration tests without browser dependencies."""
 
+import unittest
 from unittest.mock import Mock, patch
 from viviphi import Graph, CYBERPUNK, OrderType
 
 
-class TestGraphIntegration:
+class TestGraphIntegration(unittest.TestCase):
     """Integration tests for Graph class."""
     
     @patch('viviphi.graph.MermaidRenderer')

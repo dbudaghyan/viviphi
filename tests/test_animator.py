@@ -1,10 +1,11 @@
 """Tests for SVGAnimator class."""
 
+import unittest
 from viviphi.animator import SVGAnimator
 from viviphi.themes import CYBERPUNK, CORPORATE
 
 
-class TestSVGAnimator:
+class TestSVGAnimator(unittest.TestCase):
     """Test SVGAnimator functionality."""
     
     def test_init_with_simple_svg(self):

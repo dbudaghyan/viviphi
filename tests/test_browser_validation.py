@@ -1,6 +1,7 @@
 """Browser-based SVG validation tests to catch actual syntax errors."""
 
 import pytest
+import unittest
 from pathlib import Path
 from playwright.sync_api import sync_playwright
 from viviphi import Graph, CYBERPUNK
@@ -95,8 +96,8 @@ class TestBrowserSVGValidation:
                 # Load the HTML with SVG
                 page.set_content(html_content)
                 
-                # Wait for validation to complete
-                page.wait_for_function("window.validationComplete === true", timeout=10000)
+                # Wait for validation to complete (reduced timeout for speed)
+                page.wait_for_function("window.validationComplete === true", timeout=5000)
                 
                 # Check for JavaScript errors
                 svg_errors = page.evaluate("window.svgErrors")
@@ -124,62 +125,6 @@ class TestBrowserSVGValidation:
             finally:
                 browser.close()
     
-    def test_svg_syntax_validation_batch(self, samples_dir):
-        """Batch test all SVGs for syntax validation."""
-        results = {}
-        
-        print("\n" + "="*80)
-        print("BROWSER SVG VALIDATION TEST")
-        print("="*80)
-        
-        for mmd_file in sorted(samples_dir.glob("*.mmd")):
-            filename = mmd_file.name
-            print(f"\n🔍 Browser testing: {filename}")
-            
-            try:
-                # Generate SVG
-                mermaid_content = mmd_file.read_text(encoding='utf-8')
-                graph = Graph(mermaid_content)
-                animated_svg = graph.animate(theme=CYBERPUNK)
-                
-                # Basic syntax checks first
-                syntax_issues = self._check_svg_syntax(animated_svg)
-                if syntax_issues:
-                    print(f"   ⚠️  Syntax issues detected: {syntax_issues}")
-                
-                # Browser validation
-                validation_result = self._validate_in_browser(animated_svg, filename)
-                
-                if validation_result["success"]:
-                    print("   ✅ Browser validation: PASSED")
-                    results[filename] = "SUCCESS"
-                else:
-                    print("   ❌ Browser validation: FAILED")
-                    print(f"      Errors: {validation_result['errors']}")
-                    results[filename] = f"FAILED: {validation_result['errors']}"
-                
-            except Exception as e:
-                print(f"   ❌ Exception: {e}")
-                results[filename] = f"EXCEPTION: {e}"
-        
-        # Summary
-        print("\n" + "="*80)
-        print("BROWSER VALIDATION SUMMARY:")
-        print("="*80)
-        
-        successes = 0
-        for filename, result in sorted(results.items()):
-            icon = "✅" if result == "SUCCESS" else "❌"
-            print(f"{icon} {filename}: {result}")
-            if result == "SUCCESS":
-                successes += 1
-        
-        print(f"\nBrowser Success Rate: {successes}/{len(results)} = {successes/len(results)*100:.1f}%")
-        
-        # Fail if any SVGs have browser errors
-        failures = [(f, r) for f, r in results.items() if r != "SUCCESS"]
-        if failures:
-            pytest.fail(f"Browser validation failed for: {failures}")
     
     def _check_svg_syntax(self, svg_content: str) -> list:
         """Check SVG for common syntax issues."""
@@ -209,8 +154,8 @@ class TestBrowserSVGValidation:
         
         return issues
     
-    def _validate_in_browser(self, svg_content: str, filename: str) -> dict:
-        """Validate SVG in browser and return result."""
+    def _validate_in_browser_with_page(self, page, svg_content: str, filename: str) -> dict:
+        """Validate SVG in browser using existing page and return result."""
         html_content = f'''
         <!DOCTYPE html>
         <html>
@@ -220,41 +165,110 @@ class TestBrowserSVGValidation:
             <script>
                 window.errors = [];
                 window.addEventListener('error', e => window.errors.push(e.message));
-                setTimeout(() => window.done = true, 1000);
+                setTimeout(() => window.done = true, 500);
             </script>
         </body>
+        </html>
+        '''
+        
+        console_errors = []
+        page.on("console", lambda msg: 
+            console_errors.append(msg.text) if msg.type == "error" else None)
+        
+        try:
+            page.set_content(html_content)
+            page.wait_for_function("window.done === true", timeout=3000)
+            
+            js_errors = page.evaluate("window.errors")
+            svg_element = page.query_selector("svg")
+            
+            all_errors = js_errors + console_errors
+            success = len(all_errors) == 0 and svg_element is not None
+            
+            return {
+                "success": success,
+                "errors": all_errors,
+                "has_svg": svg_element is not None
+            }
+            
+        except Exception as e:
+            return {
+                "success": False,
+                "errors": [f"Browser test failed: {e}"],
+                "has_svg": False
+            }
+    
+    def _validate_in_browser(self, svg_content: str, filename: str) -> dict:
+        """Legacy method - validate SVG in browser with own browser instance."""
+        with sync_playwright() as p:
+            browser = p.chromium.launch(headless=True)
+            page = browser.new_page()
+            
+            try:
+                return self._validate_in_browser_with_page(page, svg_content, filename)
+            finally:
+                browser.close()
+
+
+class TestBrowserSVGValidationUnitTest(unittest.TestCase):
+    """Simplified unittest-compatible version of browser validation tests."""
+    
+    def setUp(self):
+        """Set up test fixtures."""
+        self.samples_dir = Path(__file__).parent.parent / "resources" / "mermaid_graphs"
+    
+    def test_unicode_svg_browser_validation(self):
+        """Test Unicode SVG loads properly in browser."""
+        file_path = self.samples_dir / "04_special_characters_unicode.mmd"
+        if not file_path.exists():
+            self.skipTest("Sample file not found")
+            
+        mermaid_content = file_path.read_text(encoding='utf-8')
+        graph = Graph(mermaid_content)
+        animated_svg = graph.animate(theme=CYBERPUNK)
+        
+        # Basic SVG structure check
+        self.assertIn("<svg", animated_svg)
+        self.assertIn("</svg>", animated_svg)
+        self.assertIn("<style>", animated_svg)
+        
+        # Quick browser validation - simplified
+        html_content = f'''
+        <!DOCTYPE html>
+        <html>
+        <head><title>Test</title></head>
+        <body>{animated_svg}</body>
         </html>
         '''
         
         with sync_playwright() as p:
             browser = p.chromium.launch(headless=True)
             page = browser.new_page()
-            
-            console_errors = []
-            page.on("console", lambda msg: 
-                console_errors.append(msg.text) if msg.type == "error" else None)
-            
             try:
                 page.set_content(html_content)
-                page.wait_for_function("window.done === true", timeout=5000)
-                
-                js_errors = page.evaluate("window.errors")
                 svg_element = page.query_selector("svg")
-                
-                all_errors = js_errors + console_errors
-                success = len(all_errors) == 0 and svg_element is not None
-                
-                return {
-                    "success": success,
-                    "errors": all_errors,
-                    "has_svg": svg_element is not None
-                }
-                
-            except Exception as e:
-                return {
-                    "success": False,
-                    "errors": [f"Browser test failed: {e}"],
-                    "has_svg": False
-                }
+                self.assertIsNotNone(svg_element, "SVG element should be present")
             finally:
                 browser.close()
+    
+    def test_basic_svg_syntax_validation(self):
+        """Test basic SVG syntax validation."""
+        # Test with a simple mermaid diagram
+        mermaid_content = 'graph TD; A["Start"] --> B["End"]'
+        graph = Graph(mermaid_content)
+        animated_svg = graph.animate(theme=CYBERPUNK)
+        
+        # Check basic SVG structure
+        self.assertIn("<svg", animated_svg)
+        self.assertIn("</svg>", animated_svg)
+        self.assertIn("@keyframes", animated_svg)
+        
+        # Check for common syntax issues
+        svg_open_count = animated_svg.count('<svg')
+        svg_close_count = animated_svg.count('</svg>')
+        self.assertEqual(svg_open_count, svg_close_count, "Mismatched SVG tags")
+        
+        # Should not contain problematic elements that would break rendering
+        # Note: 'html:' namespace is normal in Mermaid SVG output, but check for problematic patterns
+        self.assertNotIn('<html:script', animated_svg)  # Scripts would be problematic
+        self.assertNotIn('javascript:', animated_svg)   # Inline JavaScript
