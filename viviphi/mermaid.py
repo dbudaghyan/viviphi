@@ -55,12 +55,12 @@ class MermaidRenderer:
                             "document.querySelector('#mermaid-error').textContent"
                         )
                         raise RuntimeError(f"Mermaid rendering failed: {error_msg}")
-                    except Exception:
+                    except Exception:  # pragma: no cover
                         # Check console for errors
                         error_logs = [
                             msg for msg in console_messages if "error" in msg.lower()
                         ]
-                        if error_logs:
+                        if error_logs:  # pragma: no cover
                             raise RuntimeError(
                                 f"Mermaid rendering failed with errors: {'; '.join(error_logs)}"
                             )

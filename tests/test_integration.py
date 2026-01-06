@@ -92,3 +92,50 @@ class TestGraphIntegration(unittest.TestCase):
         mermaid_def = "graph TD; A[Start] --> B[End]"
         graph = Graph(mermaid_def)
         assert graph.mermaid_definition == mermaid_def
+
+    @patch('viviphi.graph.MermaidRenderer')
+    def test_graph_file_output(self, mock_renderer_class):
+        """Test that Graph can save output to a file."""
+        import tempfile
+        import os
+        
+        mock_renderer = Mock()
+        mock_svg = """<svg><path d="M 10 10 L 100 100"/></svg>"""
+        mock_renderer.render_to_svg.return_value = mock_svg
+        mock_renderer_class.return_value = mock_renderer
+        
+        graph = Graph("graph TD; A --> B")
+        
+        # Test file output
+        with tempfile.NamedTemporaryFile(mode='w', suffix='.svg', delete=False) as f:
+            output_path = f.name
+        
+        try:
+            result = graph.animate(output=output_path)
+            
+            # Verify file was created and contains expected content
+            assert os.path.exists(output_path)
+            with open(output_path, 'r') as f:
+                file_content = f.read()
+            assert "<style>" in file_content
+            assert result == file_content
+        finally:
+            # Clean up
+            if os.path.exists(output_path):
+                os.unlink(output_path)
+
+    @patch('viviphi.graph.MermaidRenderer') 
+    def test_graph_preview_method(self, mock_renderer_class):
+        """Test the preview method."""
+        mock_renderer = Mock()
+        mock_svg = """<svg><path d="M 10 10 L 100 100"/></svg>"""
+        mock_renderer.render_to_svg.return_value = mock_svg
+        mock_renderer_class.return_value = mock_renderer
+        
+        graph = Graph("graph TD; A --> B")
+        result = graph.preview()
+        
+        # Preview should generate animated SVG with default settings
+        assert "<style>" in result
+        assert CYBERPUNK.primary_color in result
+        assert "neon-glow" in result

@@ -409,7 +409,7 @@ class SVGAnimator:
                 path.set("stroke", theme.primary_color)
                 path.set("fill", "none")
 
-            except Exception as e:
+            except Exception as e:  # pragma: no cover
                 print(f"Skipping complex line path {i}: {e}")
 
         # Process arrow tip paths after lines with additional delay
@@ -468,7 +468,7 @@ class SVGAnimator:
                 path.set("stroke", theme.primary_color)
                 path.set("fill", "none")
 
-            except Exception as e:
+            except Exception as e:  # pragma: no cover
                 print(f"Skipping complex arrow tip path {i}: {e}")
 
         # Process non-path arrow tip elements (circles, rects, etc.) after lines

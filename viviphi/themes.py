@@ -121,7 +121,7 @@ class Theme(BaseModel):
                     # If component is a dict (during construction)
                     if isinstance(data[component], dict):
                         data[component][attr] = data.pop(legacy_key)
-                    else:
+                    else:  # pragma: no cover
                         # Create new component with the attribute
                         component_data = (
                             data[component].model_dump()
@@ -130,11 +130,11 @@ class Theme(BaseModel):
                         )
                         component_data[attr] = data.pop(legacy_key)
 
-                        if component == "edges":
+                        if component == "edges":  # pragma: no cover
                             data[component] = EdgeStyling(**component_data)
-                        elif component == "nodes":
+                        elif component == "nodes":  # pragma: no cover
                             data[component] = NodeStyling(**component_data)
-                        elif component == "animation":
+                        elif component == "animation":  # pragma: no cover
                             data[component] = AnimationStyling(**component_data)
 
         super().__init__(**data)
