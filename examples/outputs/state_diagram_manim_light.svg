@@ -1,0 +1,151 @@
+<svg xmlns="http://www.w3.org/2000/svg" xmlns:html="http://www.w3.org/1999/xhtml" aria-roledescription="stateDiagram" role="graphics-document document" viewBox="-35 0 227.4375 544" style="max-width: 227.4375px;" class="statediagram" width="100%" id="mermaid-1767692419704"><style>
+            /* Enhanced Theme CSS - clean edges / solid nodes */
+            
+            /* Root Variables */
+            :root {
+                --primary-color: #1f4e79;
+                --secondary-color: #1f4e79;
+                --accent-color: #1f4e79;
+                --text-color: #1f2937;
+                --background-color: #fefefe;
+                --edge-color: #1f4e79;
+                --node-fill: #1f4e79;
+                --node-border: #1f4e79;
+                --font-family: Arial, sans-serif;
+                --font-size: 14.0px;
+                --font-weight: normal;
+            }
+            
+            /* Background Styling */
+            svg {
+                background: #fefefe;
+                font-family: var(--font-family);
+                font-size: var(--font-size);
+                font-weight: var(--font-weight);
+            }
+            
+            
+            
+            /* Base Edge Animation */
+            .anim-edge {
+                stroke: var(--edge-color);
+                stroke-width: 2.0px;
+                stroke-dasharray: var(--length);
+                stroke-dashoffset: var(--length);
+                fill: none;
+                opacity: 0.8;
+                animation: draw-flow-with-markers 0.6s ease-out forwards;
+                animation-delay: 0.0s;
+            }
+            
+            /* Edge Style Variations */
+            
+            .clean-edge, .anim-edge.clean {
+                stroke-linecap: butt;
+                stroke-linejoin: miter;
+            }
+            
+            
+            /* Base Node Animation */
+            .anim-node {
+                opacity: 0;
+                animation: fade-in-node 0.5s ease-out forwards;
+                animation-delay: 0.0s;
+            }
+            
+            /* Node Style Variations */
+            
+            .solid-node, .anim-node.solid {
+                fill: #1f4e79;
+                stroke: none;
+                opacity: 1.0;
+            }
+            
+            
+            /* Animation Keyframes */
+            
+        /* Edge Animation Keyframes */
+        @keyframes draw-flow-with-markers {
+            0% { 
+                stroke-dashoffset: var(--length);
+                marker-start: none;
+                marker-end: none;
+            }
+            99% { 
+                stroke-dashoffset: 0;
+                marker-start: none;
+                marker-end: none;
+            }
+            100% { 
+                stroke-dashoffset: 0;
+                marker-start: var(--marker-start, none);
+                marker-end: var(--marker-end, none);
+            }
+        }
+        
+        /* Node Fade Animation */
+        @keyframes fade-in-node {
+            from { 
+                opacity: 0;
+                transform: scale(0.8);
+            }
+            to { 
+                opacity: 1.0;
+                transform: scale(1);
+            }
+        }
+        
+        /* Complex Shape Fade Animation - preserves existing transforms */
+        @keyframes fade-in-complex-node {
+            from { 
+                opacity: 0;
+            }
+            to { 
+                opacity: 1.0;
+            }
+        }
+        
+        /* Polygon-specific animations that preserve transforms */
+        .anim-node polygon {
+            animation: fade-in-complex-node 0.5s ease-out forwards !important;
+            transform-box: fill-box !important;
+            transform-origin: center !important;
+        }
+        
+        /* Path-specific animations for database shapes */
+        .anim-node path {
+            animation: fade-in-complex-node 0.5s ease-out forwards !important;
+            transform-box: fill-box !important;
+            transform-origin: center !important;
+        }
+        
+        /* Force preserve existing transforms for polygons - disable transform animations completely */
+        .anim-node polygon[transform] {
+            animation: none !important;
+            opacity: 1.0 !important;
+        }
+        
+        /* Also disable for paths with transforms */  
+        .anim-node path[transform] {
+            animation: none !important;
+            opacity: 1.0 !important;
+        }
+        
+        /* Database cylinder alignment will be handled dynamically by the animator */
+        
+        /* Override for simple shapes that don't have transform conflicts */
+        .anim-node rect,
+        .anim-node circle,
+        .anim-node ellipse {
+            animation: fade-in-node 0.5s ease-out forwards;
+        }
+        
+            
+            /* Text Styling */
+            text {
+                fill: var(--text-color);
+                font-family: var(--font-family);
+                font-size: var(--font-size);
+                font-weight: var(--font-weight);
+            }
+        </style><style>#mermaid-1767692419704{font-family:"trebuchet ms",verdana,arial,sans-serif;font-size:16px;fill:#000000;}#mermaid-1767692419704 .error-icon{fill:#ffffff;}#mermaid-1767692419704 .error-text{fill:#000000;stroke:#000000;}#mermaid-1767692419704 .edge-thickness-normal{stroke-width:2px;}#mermaid-1767692419704 .edge-thickness-thick{stroke-width:3.5px;}#mermaid-1767692419704 .edge-pattern-solid{stroke-dasharray:0;}#mermaid-1767692419704 .edge-pattern-dashed{stroke-dasharray:3;}#mermaid-1767692419704 .edge-pattern-dotted{stroke-dasharray:2;}#mermaid-1767692419704 .marker{fill:#000000;stroke:#000000;}#mermaid-1767692419704 .marker.cross{stroke:#000000;}#mermaid-1767692419704 svg{font-family:"trebuchet ms",verdana,arial,sans-serif;font-size:16px;}#mermaid-1767692419704 defs #statediagram-barbEnd{fill:#000000;stroke:#000000;}#mermaid-1767692419704 g.stateGroup text{fill:#000000;stroke:none;font-size:10px;}#mermaid-1767692419704 g.stateGroup text{fill:#000000;stroke:none;font-size:10px;}#mermaid-1767692419704 g.stateGroup .state-title{font-weight:bolder;fill:#000000;}#mermaid-1767692419704 g.stateGroup rect{fill:#ffffff;stroke:#000000;}#mermaid-1767692419704 g.stateGroup line{stroke:#000000;stroke-width:1;}#mermaid-1767692419704 .transition{stroke:#000000;stroke-width:1;fill:none;}#mermaid-1767692419704 .stateGroup .composit{fill:#f4f4f4;border-bottom:1px;}#mermaid-1767692419704 .stateGroup .alt-composit{fill:#e0e0e0;border-bottom:1px;}#mermaid-1767692419704 .state-note{stroke:hsl(52.6829268293, 60%, 73.9215686275%);fill:#fff5ad;}#mermaid-1767692419704 .state-note text{fill:#333;stroke:none;font-size:10px;}#mermaid-1767692419704 .stateLabel .box{stroke:none;stroke-width:0;fill:#ffffff;opacity:0.5;}#mermaid-1767692419704 .edgeLabel .label rect{fill:#ffffff;opacity:0.5;}#mermaid-1767692419704 .edgeLabel .label text{fill:#000000;}#mermaid-1767692419704 .label div .edgeLabel{color:#000000;}#mermaid-1767692419704 .stateLabel text{fill:#000000;font-size:10px;font-weight:bold;}#mermaid-1767692419704 .node circle.state-start{fill:#000000;stroke:#000000;}#mermaid-1767692419704 .node .fork-join{fill:#000000;stroke:#000000;}#mermaid-1767692419704 .node circle.state-end{fill:#000000;stroke:#f4f4f4;stroke-width:1.5;}#mermaid-1767692419704 .end-state-inner{fill:#f4f4f4;stroke-width:1.5;}#mermaid-1767692419704 .node rect{fill:#ffffff;stroke:#000000;stroke-width:1px;}#mermaid-1767692419704 .node polygon{fill:#ffffff;stroke:#000000;stroke-width:1px;}#mermaid-1767692419704 #statediagram-barbEnd{fill:#000000;}#mermaid-1767692419704 .statediagram-cluster rect{fill:#ffffff;stroke:#000000;stroke-width:1px;}#mermaid-1767692419704 .cluster-label,#mermaid-1767692419704 .nodeLabel{color:#000000;}#mermaid-1767692419704 .statediagram-cluster rect.outer{rx:5px;ry:5px;}#mermaid-1767692419704 .statediagram-state .divider{stroke:#000000;}#mermaid-1767692419704 .statediagram-state .title-state{rx:5px;ry:5px;}#mermaid-1767692419704 .statediagram-cluster.statediagram-cluster .inner{fill:#f4f4f4;}#mermaid-1767692419704 .statediagram-cluster.statediagram-cluster-alt .inner{fill:#ffffff;}#mermaid-1767692419704 .statediagram-cluster .inner{rx:0;ry:0;}#mermaid-1767692419704 .statediagram-state rect.basic{rx:5px;ry:5px;}#mermaid-1767692419704 .statediagram-state rect.divider{stroke-dasharray:10,10;fill:#ffffff;}#mermaid-1767692419704 .note-edge{stroke-dasharray:5;}#mermaid-1767692419704 .statediagram-note rect{fill:#fff5ad;stroke:hsl(52.6829268293, 60%, 73.9215686275%);stroke-width:1px;rx:0;ry:0;}#mermaid-1767692419704 .statediagram-note rect{fill:#fff5ad;stroke:hsl(52.6829268293, 60%, 73.9215686275%);stroke-width:1px;rx:0;ry:0;}#mermaid-1767692419704 .statediagram-note text{fill:#333;}#mermaid-1767692419704 .statediagram-note .nodeLabel{color:#333;}#mermaid-1767692419704 .statediagram .edgeLabel{color:red;}#mermaid-1767692419704 #dependencyStart,#mermaid-1767692419704 #dependencyEnd{fill:#000000;stroke:#000000;stroke-width:1;}#mermaid-1767692419704 .statediagramTitleText{text-anchor:middle;font-size:18px;fill:#000000;}#mermaid-1767692419704 :root{--mermaid-font-family:"trebuchet ms",verdana,arial,sans-serif;}</style><g><defs><marker orient="auto" markerUnits="strokeWidth" markerHeight="14" markerWidth="20" refY="7" refX="19" id="mermaid-1767692419704_statediagram-barbEnd"><path d="M 19,7 L9,13 L14,7 L9,1 Z" style="; --length: 38.94; --glow-color: #1f4e79; animation-delay: 1.006536299132731s;" class="anim-edge clean-edge" stroke="#1f4e79" fill="none" /></marker></defs><g class="root"><g class="clusters" /><g class="edgePaths"><path style="fill:none; --length: 50.00; --glow-color: #1f4e79; --marker-start: none; --marker-end: url(#mermaid-1767692419704_statediagram-barbEnd); animation-delay: 1.0081470825230754s;" class="anim-edge clean-edge" id="edge0" d="M44.484,22L44.484,26.167C44.484,30.333,44.484,38.667,44.484,47C44.484,55.333,44.484,63.667,44.484,67.833L44.484,72" stroke="#1f4e79" fill="none" /><path style="fill:none; --length: 469.26; --glow-color: #1f4e79; --marker-start: none; --marker-end: url(#mermaid-1767692419704_statediagram-barbEnd); animation-delay: 1.090343110395052s;" class="anim-edge clean-edge" id="edge1" d="M22.961,101.646L14.634,106.538C6.307,111.431,-10.346,121.215,-18.673,149.608C-27,178,-27,225,-27,272C-27,319,-27,366,-27,396.5C-27,427,-27,441,-27,455C-27,469,-27,483,-17.787,494.795C-8.575,506.589,9.85,516.179,19.063,520.974L28.275,525.768" stroke="#1f4e79" fill="none" /><path style="fill:none; --length: 82.41; --glow-color: #1f4e79; --marker-start: none; --marker-end: url(#mermaid-1767692419704_statediagram-barbEnd); animation-delay: 0.7996625914145316s;" class="anim-edge clean-edge" id="edge5" d="M95.969,472L95.969,476.167C95.969,480.333,95.969,488.667,86.756,497.628C77.544,506.589,59.119,516.179,49.906,520.974L40.694,525.768" stroke="#1f4e79" fill="none" /><path style="fill:none; --length: 51.25; --glow-color: #1f4e79; --marker-start: none; --marker-end: url(#mermaid-1767692419704_statediagram-barbEnd); animation-delay: 0.5907989599720159s;" class="anim-edge clean-edge" id="edge2" d="M44.484,106L44.484,110.167C44.484,114.333,44.484,122.667,46.006,131C47.527,139.333,50.57,147.667,52.091,151.833L53.613,156" stroke="#1f4e79" fill="none" /><path style="fill:none; --length: 69.38; --glow-color: #1f4e79; --marker-start: none; --marker-end: url(#mermaid-1767692419704_statediagram-barbEnd); animation-delay: 0.846730913108807s;" class="anim-edge clean-edge" id="edge3" d="M104.196,156L104.491,151.833C104.787,147.667,105.378,139.333,99.013,130.617C92.648,121.901,79.328,112.802,72.668,108.252L66.008,103.703" stroke="#1f4e79" fill="none" /><path style="fill:none; --length: 50.00; --glow-color: #1f4e79; --marker-start: none; --marker-end: url(#mermaid-1767692419704_statediagram-barbEnd); animation-delay: 0.3737024514840733s;" class="anim-edge clean-edge" id="edge4" d="M95.969,388L95.969,392.167C95.969,396.333,95.969,404.667,95.969,413C95.969,421.333,95.969,429.667,95.969,433.833L95.969,438" stroke="#1f4e79" fill="none" /></g><g class="edgeLabels"><g class="edgeLabel"><g transform="translate(0, 0)" class="label"><rect height="0" width="0" ry="0" rx="0" style="opacity: 0; animation-delay: 1.0922478908629627s;" class="anim-node solid-node" /><foreignObject height="0" width="0"><html:div style="display: inline-block; white-space: nowrap;"><html:span class="edgeLabel" /></html:div></foreignObject></g></g><g class="edgeLabel"><g transform="translate(0, 0)" class="label"><rect height="0" width="0" ry="0" rx="0" style="opacity: 0; animation-delay: 1.0401893633091686s;" class="anim-node solid-node" /><foreignObject height="0" width="0"><html:div style="display: inline-block; white-space: nowrap;"><html:span class="edgeLabel" /></html:div></foreignObject></g></g><g class="edgeLabel"><g transform="translate(0, 0)" class="label"><rect height="0" width="0" ry="0" rx="0" style="opacity: 0; animation-delay: 0.5388321528310293s;" class="anim-node solid-node" /><foreignObject height="0" width="0"><html:div style="display: inline-block; white-space: nowrap;"><html:span class="edgeLabel" /></html:div></foreignObject></g></g><g class="edgeLabel"><g transform="translate(0, 0)" class="label"><rect height="0" width="0" ry="0" rx="0" style="opacity: 0; animation-delay: 0.283737878627752s;" class="anim-node solid-node" /><foreignObject height="0" width="0"><html:div style="display: inline-block; white-space: nowrap;"><html:span class="edgeLabel" /></html:div></foreignObject></g></g><g class="edgeLabel"><g transform="translate(0, 0)" class="label"><rect height="0" width="0" ry="0" rx="0" style="opacity: 0; animation-delay: 0.9055444517294172s;" class="anim-node solid-node" /><foreignObject height="0" width="0"><html:div style="display: inline-block; white-space: nowrap;"><html:span class="edgeLabel" /></html:div></foreignObject></g></g><g class="edgeLabel"><g transform="translate(0, 0)" class="label"><rect height="0" width="0" ry="0" rx="0" style="opacity: 0; animation-delay: 0.26326922960661653s;" class="anim-node solid-node" /><foreignObject height="0" width="0"><html:div style="display: inline-block; white-space: nowrap;"><html:span class="edgeLabel" /></html:div></foreignObject></g></g></g><g class="nodes"><g transform="translate(44.484375, 15)" id="state-root_start-0" class="node default"><circle height="14" width="14" r="7" class="anim-node solid-node" style="opacity: 0; animation-delay: 1.0049758595108s;" /></g><g transform="translate(44.484375, 89)" id="state-Still-3" class="node  statediagram-state undefined"><rect height="34" width="43.046875" y="-17" x="-21.5234375" style="opacity: 0; animation-delay: 1.3003081150349218s;" class="anim-node solid-node" /><g transform="translate(-14.0234375, -9.5)" style="" class="label"><rect style="opacity: 0; animation-delay: 0.5792597949693156s;" class="anim-node solid-node" /><foreignObject height="19" width="28.046875"><html:div style="display: inline-block; white-space: nowrap;"><html:span class="nodeLabel">Still</html:span></html:div></foreignObject></g></g><g transform="translate(34.484375, 529)" id="state-root_end-5" class="node default"><circle height="14" width="14" r="7" class="anim-node solid-node" style="opacity: 0; animation-delay: 0.1632581995526856s;" /><circle height="10" width="10" r="5" class="anim-node solid-node" style="opacity: 0; animation-delay: 1.0589650937923083s;" /></g><g transform="translate(0.5, 148)" class="root"><g class="clusters"><g id="Moving" class="statediagram-state statediagram-cluster"><rect height="232" width="175.9375" y="8" x="8" class="anim-node solid-node" style="opacity: 0; animation-delay: 0.8829041302578021s;" /><g transform="translate(71.4140625, 8)" class="cluster-label"><foreignObject height="19" width="49.109375"><html:div style="display: inline-block; white-space: nowrap;"><html:span class="nodeLabel">Moving</html:span></html:div></foreignObject></g><rect height="210" width="175.9375" y="26" x="8" class="anim-node solid-node" style="opacity: 0; animation-delay: 0.5938003212113493s;" /></g></g><g class="edgePaths"><path style="fill:none; --length: 50.00; --glow-color: #1f4e79; --marker-start: none; --marker-end: url(#mermaid-1767692419704_statediagram-barbEnd); animation-delay: 0.6534527125005762s;" class="anim-edge clean-edge" id="edge6" d="M95.969,47L95.969,51.167C95.969,55.333,95.969,63.667,95.969,72C95.969,80.333,95.969,88.667,95.969,92.833L95.969,97" stroke="#1f4e79" fill="none" /><path style="fill:none; --length: 57.92; --glow-color: #1f4e79; --marker-start: none; --marker-end: url(#mermaid-1767692419704_statediagram-barbEnd); animation-delay: 0.779406325509732s;" class="anim-edge clean-edge" id="edge7" d="M82.213,131L78.842,135.167C75.47,139.333,68.727,147.667,68.727,156C68.727,164.333,75.47,172.667,78.842,176.833L82.213,181" stroke="#1f4e79" fill="none" /><path style="fill:none; --length: 57.92; --glow-color: #1f4e79; --marker-start: none; --marker-end: url(#mermaid-1767692419704_statediagram-barbEnd); animation-delay: 0.40688481303138735s;" class="anim-edge clean-edge" id="edge8" d="M109.724,181L113.096,176.833C116.467,172.667,123.21,164.333,123.21,156C123.21,147.667,116.467,139.333,113.096,135.167L109.724,131" stroke="#1f4e79" fill="none" /></g><g class="edgeLabels"><g class="edgeLabel"><g transform="translate(0, 0)" class="label"><rect height="0" width="0" ry="0" rx="0" style="opacity: 0; animation-delay: 0.2412506449350558s;" class="anim-node solid-node" /><foreignObject height="0" width="0"><html:div style="display: inline-block; white-space: nowrap;"><html:span class="edgeLabel" /></html:div></foreignObject></g></g><g class="edgeLabel"><g transform="translate(0, 0)" class="label"><rect height="0" width="0" ry="0" rx="0" style="opacity: 0; animation-delay: 0.2499362769604727s;" class="anim-node solid-node" /><foreignObject height="0" width="0"><html:div style="display: inline-block; white-space: nowrap;"><html:span class="edgeLabel" /></html:div></foreignObject></g></g><g class="edgeLabel"><g transform="translate(0, 0)" class="label"><rect height="0" width="0" ry="0" rx="0" style="opacity: 0; animation-delay: 0.9745774823710671s;" class="anim-node solid-node" /><foreignObject height="0" width="0"><html:div style="display: inline-block; white-space: nowrap;"><html:span class="edgeLabel" /></html:div></foreignObject></g></g></g><g class="nodes"><g transform="translate(95.96875, 40)" id="state-Moving_start-6" class="node default"><circle height="14" width="14" r="7" class="anim-node solid-node" style="opacity: 0; animation-delay: 0.5820629279132515s;" /></g><g transform="translate(95.96875, 114)" id="state-Accelerating-8" class="node  statediagram-state undefined"><rect height="34" width="104.765625" y="-17" x="-52.3828125" style="opacity: 0; animation-delay: 1.327301665583935s;" class="anim-node solid-node" /><g transform="translate(-44.8828125, -9.5)" style="" class="label"><rect style="opacity: 0; animation-delay: 0.8001732216208813s;" class="anim-node solid-node" /><foreignObject height="19" width="89.765625"><html:div style="display: inline-block; white-space: nowrap;"><html:span class="nodeLabel">Accelerating</html:span></html:div></foreignObject></g></g><g transform="translate(95.96875, 198)" id="state-Decelerating-8" class="node  statediagram-state undefined"><rect height="34" width="105.9375" y="-17" x="-52.96875" style="opacity: 0; animation-delay: 0.06773137327258882s;" class="anim-node solid-node" /><g transform="translate(-45.46875, -9.5)" style="" class="label"><rect style="opacity: 0; animation-delay: 0.5312569505258802s;" class="anim-node solid-node" /><foreignObject height="19" width="90.9375"><html:div style="display: inline-block; white-space: nowrap;"><html:span class="nodeLabel">Decelerating</html:span></html:div></foreignObject></g></g></g></g><g transform="translate(95.96875, 455)" id="state-Crash-5" class="node  statediagram-state undefined"><rect height="34" width="54.421875" y="-17" x="-27.2109375" style="opacity: 0; animation-delay: 0.6006607292957913s;" class="anim-node solid-node" /><g transform="translate(-19.7109375, -9.5)" style="" class="label"><rect style="opacity: 0; animation-delay: 0.36783852328152306s;" class="anim-node solid-node" /><foreignObject height="19" width="39.421875"><html:div style="display: inline-block; white-space: nowrap;"><html:span class="nodeLabel">Crash</html:span></html:div></foreignObject></g></g></g></g></g></svg>

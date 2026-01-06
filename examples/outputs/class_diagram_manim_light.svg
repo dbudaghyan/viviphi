@@ -1,0 +1,151 @@
+<svg xmlns="http://www.w3.org/2000/svg" xmlns:html="http://www.w3.org/1999/xhtml" aria-roledescription="classDiagram" role="graphics-document document" viewBox="0 0 433.03125 343" style="max-width: 433.03125px;" width="100%" id="mermaid-1767692419319"><style>
+            /* Enhanced Theme CSS - clean edges / solid nodes */
+            
+            /* Root Variables */
+            :root {
+                --primary-color: #1f4e79;
+                --secondary-color: #1f4e79;
+                --accent-color: #1f4e79;
+                --text-color: #1f2937;
+                --background-color: #fefefe;
+                --edge-color: #1f4e79;
+                --node-fill: #1f4e79;
+                --node-border: #1f4e79;
+                --font-family: Arial, sans-serif;
+                --font-size: 14.0px;
+                --font-weight: normal;
+            }
+            
+            /* Background Styling */
+            svg {
+                background: #fefefe;
+                font-family: var(--font-family);
+                font-size: var(--font-size);
+                font-weight: var(--font-weight);
+            }
+            
+            
+            
+            /* Base Edge Animation */
+            .anim-edge {
+                stroke: var(--edge-color);
+                stroke-width: 2.0px;
+                stroke-dasharray: var(--length);
+                stroke-dashoffset: var(--length);
+                fill: none;
+                opacity: 0.8;
+                animation: draw-flow-with-markers 0.6s ease-out forwards;
+                animation-delay: 0.0s;
+            }
+            
+            /* Edge Style Variations */
+            
+            .clean-edge, .anim-edge.clean {
+                stroke-linecap: butt;
+                stroke-linejoin: miter;
+            }
+            
+            
+            /* Base Node Animation */
+            .anim-node {
+                opacity: 0;
+                animation: fade-in-node 0.5s ease-out forwards;
+                animation-delay: 0.0s;
+            }
+            
+            /* Node Style Variations */
+            
+            .solid-node, .anim-node.solid {
+                fill: #1f4e79;
+                stroke: none;
+                opacity: 1.0;
+            }
+            
+            
+            /* Animation Keyframes */
+            
+        /* Edge Animation Keyframes */
+        @keyframes draw-flow-with-markers {
+            0% { 
+                stroke-dashoffset: var(--length);
+                marker-start: none;
+                marker-end: none;
+            }
+            99% { 
+                stroke-dashoffset: 0;
+                marker-start: none;
+                marker-end: none;
+            }
+            100% { 
+                stroke-dashoffset: 0;
+                marker-start: var(--marker-start, none);
+                marker-end: var(--marker-end, none);
+            }
+        }
+        
+        /* Node Fade Animation */
+        @keyframes fade-in-node {
+            from { 
+                opacity: 0;
+                transform: scale(0.8);
+            }
+            to { 
+                opacity: 1.0;
+                transform: scale(1);
+            }
+        }
+        
+        /* Complex Shape Fade Animation - preserves existing transforms */
+        @keyframes fade-in-complex-node {
+            from { 
+                opacity: 0;
+            }
+            to { 
+                opacity: 1.0;
+            }
+        }
+        
+        /* Polygon-specific animations that preserve transforms */
+        .anim-node polygon {
+            animation: fade-in-complex-node 0.5s ease-out forwards !important;
+            transform-box: fill-box !important;
+            transform-origin: center !important;
+        }
+        
+        /* Path-specific animations for database shapes */
+        .anim-node path {
+            animation: fade-in-complex-node 0.5s ease-out forwards !important;
+            transform-box: fill-box !important;
+            transform-origin: center !important;
+        }
+        
+        /* Force preserve existing transforms for polygons - disable transform animations completely */
+        .anim-node polygon[transform] {
+            animation: none !important;
+            opacity: 1.0 !important;
+        }
+        
+        /* Also disable for paths with transforms */  
+        .anim-node path[transform] {
+            animation: none !important;
+            opacity: 1.0 !important;
+        }
+        
+        /* Database cylinder alignment will be handled dynamically by the animator */
+        
+        /* Override for simple shapes that don't have transform conflicts */
+        .anim-node rect,
+        .anim-node circle,
+        .anim-node ellipse {
+            animation: fade-in-node 0.5s ease-out forwards;
+        }
+        
+            
+            /* Text Styling */
+            text {
+                fill: var(--text-color);
+                font-family: var(--font-family);
+                font-size: var(--font-size);
+                font-weight: var(--font-weight);
+            }
+        </style><style>#mermaid-1767692419319{font-family:"trebuchet ms",verdana,arial,sans-serif;font-size:16px;fill:#000000;}#mermaid-1767692419319 .error-icon{fill:#ffffff;}#mermaid-1767692419319 .error-text{fill:#000000;stroke:#000000;}#mermaid-1767692419319 .edge-thickness-normal{stroke-width:2px;}#mermaid-1767692419319 .edge-thickness-thick{stroke-width:3.5px;}#mermaid-1767692419319 .edge-pattern-solid{stroke-dasharray:0;}#mermaid-1767692419319 .edge-pattern-dashed{stroke-dasharray:3;}#mermaid-1767692419319 .edge-pattern-dotted{stroke-dasharray:2;}#mermaid-1767692419319 .marker{fill:#000000;stroke:#000000;}#mermaid-1767692419319 .marker.cross{stroke:#000000;}#mermaid-1767692419319 svg{font-family:"trebuchet ms",verdana,arial,sans-serif;font-size:16px;}#mermaid-1767692419319 g.classGroup text{fill:#000000;stroke:none;font-family:"trebuchet ms",verdana,arial,sans-serif;font-size:10px;}#mermaid-1767692419319 g.classGroup text .title{font-weight:bolder;}#mermaid-1767692419319 .nodeLabel,#mermaid-1767692419319 .edgeLabel{color:#000000;}#mermaid-1767692419319 .edgeLabel .label rect{fill:#ffffff;}#mermaid-1767692419319 .label text{fill:#000000;}#mermaid-1767692419319 .edgeLabel .label span{background:#ffffff;}#mermaid-1767692419319 .classTitle{font-weight:bolder;}#mermaid-1767692419319 .node rect,#mermaid-1767692419319 .node circle,#mermaid-1767692419319 .node ellipse,#mermaid-1767692419319 .node polygon,#mermaid-1767692419319 .node path{fill:#ffffff;stroke:#000000;stroke-width:1px;}#mermaid-1767692419319 .divider{stroke:#000000;stroke-width:1;}#mermaid-1767692419319 g.clickable{cursor:pointer;}#mermaid-1767692419319 g.classGroup rect{fill:#ffffff;stroke:#000000;}#mermaid-1767692419319 g.classGroup line{stroke:#000000;stroke-width:1;}#mermaid-1767692419319 .classLabel .box{stroke:none;stroke-width:0;fill:#ffffff;opacity:0.5;}#mermaid-1767692419319 .classLabel .label{fill:#000000;font-size:10px;}#mermaid-1767692419319 .relation{stroke:#000000;stroke-width:1;fill:none;}#mermaid-1767692419319 .dashed-line{stroke-dasharray:3;}#mermaid-1767692419319 .dotted-line{stroke-dasharray:1 2;}#mermaid-1767692419319 #compositionStart,#mermaid-1767692419319 .composition{fill:#000000!important;stroke:#000000!important;stroke-width:1;}#mermaid-1767692419319 #compositionEnd,#mermaid-1767692419319 .composition{fill:#000000!important;stroke:#000000!important;stroke-width:1;}#mermaid-1767692419319 #dependencyStart,#mermaid-1767692419319 .dependency{fill:#000000!important;stroke:#000000!important;stroke-width:1;}#mermaid-1767692419319 #dependencyStart,#mermaid-1767692419319 .dependency{fill:#000000!important;stroke:#000000!important;stroke-width:1;}#mermaid-1767692419319 #extensionStart,#mermaid-1767692419319 .extension{fill:transparent!important;stroke:#000000!important;stroke-width:1;}#mermaid-1767692419319 #extensionEnd,#mermaid-1767692419319 .extension{fill:transparent!important;stroke:#000000!important;stroke-width:1;}#mermaid-1767692419319 #aggregationStart,#mermaid-1767692419319 .aggregation{fill:transparent!important;stroke:#000000!important;stroke-width:1;}#mermaid-1767692419319 #aggregationEnd,#mermaid-1767692419319 .aggregation{fill:transparent!important;stroke:#000000!important;stroke-width:1;}#mermaid-1767692419319 #lollipopStart,#mermaid-1767692419319 .lollipop{fill:#ffffff!important;stroke:#000000!important;stroke-width:1;}#mermaid-1767692419319 #lollipopEnd,#mermaid-1767692419319 .lollipop{fill:#ffffff!important;stroke:#000000!important;stroke-width:1;}#mermaid-1767692419319 .edgeTerminals{font-size:11px;}#mermaid-1767692419319 .classTitleText{text-anchor:middle;font-size:18px;fill:#000000;}#mermaid-1767692419319 :root{--mermaid-font-family:"trebuchet ms",verdana,arial,sans-serif;}</style><g><defs><marker orient="auto" markerHeight="240" markerWidth="190" refY="7" refX="18" class="marker aggregation classDiagram" id="mermaid-1767692419319_classDiagram-aggregationStart"><path d="M 18,7 L9,13 L1,7 L9,1 Z" style="; --length: 41.63; --glow-color: #1f4e79; animation-delay: 1.0185656083922419s;" class="anim-edge clean-edge" stroke="#1f4e79" fill="none" /></marker><marker orient="auto" markerHeight="240" markerWidth="190" refY="7" refX="18" class="marker extension classDiagram" id="mermaid-1767692419319_classDiagram-extensionStart_reversed"><path d="M 17.0,7 L0.0,13 V 1 Z" /></marker></defs><defs><marker orient="auto" markerHeight="28" markerWidth="20" refY="7" refX="1" class="marker aggregation classDiagram" id="mermaid-1767692419319_classDiagram-aggregationEnd"><path d="M 18,7 L9,13 L1,7 L9,1 Z" style="; --length: 41.63; --glow-color: #1f4e79; animation-delay: 0.4699857999910054s;" class="anim-edge clean-edge" stroke="#1f4e79" fill="none" /></marker></defs><defs><marker orient="auto" markerHeight="240" markerWidth="190" refY="7" refX="18" class="marker extension classDiagram" id="mermaid-1767692419319_classDiagram-extensionStart"><path d="M 1,7 L18,13 V 1 Z" style="; --length: 48.06; --glow-color: #1f4e79; animation-delay: 1.0242313293167016s;" class="anim-edge clean-edge" stroke="#1f4e79" fill="none" /></marker></defs><defs><marker orient="auto" markerHeight="28" markerWidth="20" refY="7" refX="1" class="marker extension classDiagram" id="mermaid-1767692419319_classDiagram-extensionEnd"><path d="M 1,1 V 13 L18,7 Z" style="; --length: 48.06; --glow-color: #1f4e79; animation-delay: 0.14792993922322217s;" class="anim-edge clean-edge" stroke="#1f4e79" fill="none" /></marker></defs><defs><marker orient="auto" markerHeight="240" markerWidth="190" refY="7" refX="18" class="marker composition classDiagram" id="mermaid-1767692419319_classDiagram-compositionStart"><path d="M 18,7 L9,13 L1,7 L9,1 Z" style="; --length: 41.63; --glow-color: #1f4e79; animation-delay: 1.3037353757146235s;" class="anim-edge clean-edge" stroke="#1f4e79" fill="none" /></marker></defs><defs><marker orient="auto" markerHeight="28" markerWidth="20" refY="7" refX="1" class="marker composition classDiagram" id="mermaid-1767692419319_classDiagram-compositionEnd"><path d="M 18,7 L9,13 L1,7 L9,1 Z" style="; --length: 41.63; --glow-color: #1f4e79; animation-delay: 1.2708803823517916s;" class="anim-edge clean-edge" stroke="#1f4e79" fill="none" /></marker></defs><defs><marker orient="auto" markerHeight="240" markerWidth="190" refY="7" refX="6" class="marker dependency classDiagram" id="mermaid-1767692419319_classDiagram-dependencyStart"><path d="M 5,7 L9,13 L1,7 L9,1 Z" style="; --length: 34.42; --glow-color: #1f4e79; animation-delay: 0.549474172864274s;" class="anim-edge clean-edge" stroke="#1f4e79" fill="none" /></marker></defs><defs><marker orient="auto" markerHeight="28" markerWidth="20" refY="7" refX="13" class="marker dependency classDiagram" id="mermaid-1767692419319_classDiagram-dependencyEnd"><path d="M 18,7 L9,13 L14,7 L9,1 Z" style="; --length: 37.25; --glow-color: #1f4e79; animation-delay: 0.7459092668902062s;" class="anim-edge clean-edge" stroke="#1f4e79" fill="none" /></marker></defs><defs><marker orient="auto" markerHeight="240" markerWidth="190" refY="7" refX="13" class="marker lollipop classDiagram" id="mermaid-1767692419319_classDiagram-lollipopStart"><circle r="6" cy="7" cx="7" fill="transparent" stroke="black" style="; animation-delay: 1.4252289034703445s;" class="anim-edge clean-edge" /></marker></defs><defs><marker orient="auto" markerHeight="240" markerWidth="190" refY="7" refX="1" class="marker lollipop classDiagram" id="mermaid-1767692419319_classDiagram-lollipopEnd"><circle r="6" cy="7" cx="7" fill="transparent" stroke="black" style="; animation-delay: 0.6207126317223761s;" class="anim-edge clean-edge" /></marker></defs><g class="root"><g class="clusters" /><g class="edgePaths"><path marker-start="none" style="fill:none; --length: 138.77; --glow-color: #1f4e79; --marker-start: none; --marker-end: url(#mermaid-1767692419319_classDiagram-extensionStart_reversed); animation-delay: 0.3121738385307572s;" class="anim-edge clean-edge" id="id1" d="M 78.805,208.0 L 78.805,203.833 C 78.805,199.667 78.805,191.333 96.227,177.48 C 113.649,163.626 148.494,144.252 165.916,134.565 L 183.339,124.878" stroke="#1f4e79" fill="none" /><path marker-start="none" style="fill:none; --length: 43.50; --glow-color: #1f4e79; --marker-start: none; --marker-end: url(#mermaid-1767692419319_classDiagram-extensionStart_reversed); animation-delay: 0.28478560687696886s;" class="anim-edge clean-edge" id="id2" d="M 258.656,219.5 L 258.656,213.417 C 258.656,207.333 258.656,195.167 258.656,187.917 C 258.656,180.667 258.656,178.333 258.656,177.167 L 258.656,176.0" stroke="#1f4e79" fill="none" /><path marker-start="none" style="fill:none; --length: 131.30; --glow-color: #1f4e79; --marker-start: none; --marker-end: url(#mermaid-1767692419319_classDiagram-extensionStart_reversed); animation-delay: 0.1551858921782638s;" class="anim-edge clean-edge" id="id3" d="M 396.367,242.5 L 396.367,232.583 C 396.367,222.667 396.367,202.833 385.774,185.224 C 375.181,167.615 353.994,152.23 343.4,144.538 L 332.807,136.845" stroke="#1f4e79" fill="none" /></g><g class="edgeLabels"><g class="edgeLabel"><g transform="translate(0, 0)" class="label"><foreignObject height="0" width="0"><html:div style="display: inline-block; white-space: nowrap;"><html:span class="edgeLabel" /></html:div></foreignObject></g></g><g class="edgeLabel"><g transform="translate(0, 0)" class="label"><foreignObject height="0" width="0"><html:div style="display: inline-block; white-space: nowrap;"><html:span class="edgeLabel" /></html:div></foreignObject></g></g><g class="edgeLabel"><g transform="translate(0, 0)" class="label"><foreignObject height="0" width="0"><html:div style="display: inline-block; white-space: nowrap;"><html:span class="edgeLabel" /></html:div></foreignObject></g></g></g><g class="nodes"><g transform="translate(258.65625, 83)" id="classId-Animal-0" class="node default"><rect height="150" width="119.171875" y="-75" x="-59.5859375" class="anim-node solid-node" style="opacity: 0; animation-delay: 0.13649266737254204s;" /><line y2="-44" y1="-44" x2="59.5859375" x1="-59.5859375" class="divider" /><line y2="18" y1="18" x2="59.5859375" x1="-59.5859375" class="divider" /><g class="label"><foreignObject height="0" width="0"><html:div style="display: inline-block; white-space: nowrap;"><html:span class="nodeLabel" /></html:div></foreignObject><foreignObject transform="translate( -25.671875, -67.5)" height="19" width="51.34375" class="classTitle"><html:div style="display: inline-block; white-space: nowrap;"><html:span class="nodeLabel">Animal</html:span></html:div></foreignObject><foreignObject transform="translate( -52.0859375, -32.5)" height="19" width="58.03125"><html:div style="display: inline-block; white-space: nowrap;"><html:span class="nodeLabel">+int age</html:span></html:div></foreignObject><foreignObject transform="translate( -52.0859375, -9.5)" height="19" width="104.171875"><html:div style="display: inline-block; white-space: nowrap;"><html:span class="nodeLabel">+String gender</html:span></html:div></foreignObject><foreignObject transform="translate( -52.0859375, 25.5)" height="19" width="90.625"><html:div style="display: inline-block; white-space: nowrap;"><html:span class="nodeLabel">+isMammal()</html:span></html:div></foreignObject><foreignObject transform="translate( -52.0859375, 48.5)" height="19" width="56.90625"><html:div style="display: inline-block; white-space: nowrap;"><html:span class="nodeLabel">+mate()</html:span></html:div></foreignObject></g></g><g transform="translate(78.8046875, 271.5)" id="classId-Duck-1" class="node default"><rect height="127" width="141.609375" y="-63.5" x="-70.8046875" class="anim-node solid-node" style="opacity: 0; animation-delay: 0.16065474002501978s;" /><line y2="-32.5" y1="-32.5" x2="70.8046875" x1="-70.8046875" class="divider" /><line y2="6.5" y1="6.5" x2="70.8046875" x1="-70.8046875" class="divider" /><g class="label"><foreignObject height="0" width="0"><html:div style="display: inline-block; white-space: nowrap;"><html:span class="nodeLabel" /></html:div></foreignObject><foreignObject transform="translate( -18.34375, -56)" height="19" width="36.6875" class="classTitle"><html:div style="display: inline-block; white-space: nowrap;"><html:span class="nodeLabel">Duck</html:span></html:div></foreignObject><foreignObject transform="translate( -63.3046875, -21)" height="19" width="126.609375"><html:div style="display: inline-block; white-space: nowrap;"><html:span class="nodeLabel">+String beakColor</html:span></html:div></foreignObject><foreignObject transform="translate( -63.3046875, 14)" height="19" width="56.375"><html:div style="display: inline-block; white-space: nowrap;"><html:span class="nodeLabel">+swim()</html:span></html:div></foreignObject><foreignObject transform="translate( -63.3046875, 37)" height="19" width="62.203125"><html:div style="display: inline-block; white-space: nowrap;"><html:span class="nodeLabel">+quack()</html:span></html:div></foreignObject></g></g><g transform="translate(258.65625, 271.5)" id="classId-Fish-2" class="node default"><rect height="104" width="118.09375" y="-52" x="-59.046875" class="anim-node solid-node" style="opacity: 0; animation-delay: 0.007635512951378265s;" /><line y2="-21" y1="-21" x2="59.046875" x1="-59.046875" class="divider" /><line y2="18" y1="18" x2="59.046875" x1="-59.046875" class="divider" /><g class="label"><foreignObject height="0" width="0"><html:div style="display: inline-block; white-space: nowrap;"><html:span class="nodeLabel" /></html:div></foreignObject><foreignObject transform="translate( -15.2421875, -44.5)" height="19" width="30.484375" class="classTitle"><html:div style="display: inline-block; white-space: nowrap;"><html:span class="nodeLabel">Fish</html:span></html:div></foreignObject><foreignObject transform="translate( -51.546875, -9.5)" height="19" width="103.09375"><html:div style="display: inline-block; white-space: nowrap;"><html:span class="nodeLabel">-int sizeInFeet</html:span></html:div></foreignObject><foreignObject transform="translate( -51.546875, 25.5)" height="19" width="66.015625"><html:div style="display: inline-block; white-space: nowrap;"><html:span class="nodeLabel">-canEat()</html:span></html:div></foreignObject></g></g><g transform="translate(396.3671875, 271.5)" id="classId-Zebra-3" class="node default"><rect height="58" width="57.328125" y="-29" x="-28.6640625" class="anim-node solid-node" style="opacity: 0; animation-delay: 0.05769418661495651s;" /><line y2="2" y1="2" x2="28.6640625" x1="-28.6640625" class="divider" /><line y2="18" y1="18" x2="28.6640625" x1="-28.6640625" class="divider" /><g class="label"><foreignObject height="0" width="0"><html:div style="display: inline-block; white-space: nowrap;"><html:span class="nodeLabel" /></html:div></foreignObject><foreignObject transform="translate( -21.1640625, -21.5)" height="19" width="42.328125" class="classTitle"><html:div style="display: inline-block; white-space: nowrap;"><html:span class="nodeLabel">Zebra</html:span></html:div></foreignObject></g></g></g></g></g></svg>

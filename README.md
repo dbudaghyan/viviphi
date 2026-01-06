@@ -140,6 +140,10 @@ graph LR
 """
 ```
 
+<div align="center">
+  <img src="examples/outputs/flowchart_example_manim_light.svg" alt="Flowchart Example" width="300">
+</div>
+
 ### Sequence Diagrams
 ```python
 sequence = """
@@ -172,6 +176,10 @@ classDiagram
 """
 ```
 
+<div align="center">
+  <img src="examples/outputs/class_diagram_manim_light.svg" alt="Class Diagram Example" width="300">
+</div>
+
 ### State Diagrams
 ```python
 state_diagram = """
@@ -182,6 +190,10 @@ stateDiagram-v2
     Running --> [*]: shutdown()
 """
 ```
+
+<div align="center">
+  <img src="examples/outputs/state_diagram_manim_light.svg" alt="State Diagram Example" width="300">
+</div>
 
 ## 🔧 Advanced Usage
 
