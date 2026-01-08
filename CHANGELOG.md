@@ -2,6 +2,9 @@
 
 ## [1.0]
 
+### [1.2.0] - 2026-01-08
+- Add `delay` optional argument to `Graph.animate`
+
 ### [1.1.2] - 2026-01-08
 - Update logo(s) and readme.
 - Add coverage tests.
