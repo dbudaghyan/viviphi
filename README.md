@@ -1,7 +1,7 @@
 <div align="center">
 
   <div align="center">
-    <img src="examples/outputs/viviphi_logo_cyberpunk.svg" alt="Viviphi Logo" width="400">
+    <img src="examples/outputs/viviphi_logo.svg" alt="Viviphi Logo" width="400">
   </div>
 
   <!-- Project Shields -->
