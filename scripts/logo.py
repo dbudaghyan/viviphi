@@ -72,7 +72,7 @@ def create_logo():
     graph = Graph(logo_mermaid)
     output_file = output_dir / "viviphi_logo.svg"
 
-    graph.animate(theme=theme, speed="fast", output=str(output_file))
+    graph.animate(theme=theme, speed="normal", output=str(output_file), delay=1)
     print(f"Logo created: {output_file}")
 
 

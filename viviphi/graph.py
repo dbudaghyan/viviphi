@@ -27,6 +27,7 @@ class Graph:
         speed: Literal["slow", "normal", "fast"] = "normal",
         order_type: OrderType = OrderType.ORDERED,
         output: Optional[str] = None,
+        delay: float = 0,
     ) -> str:
         """Generate an animated SVG from the Mermaid definition.
 
@@ -35,6 +36,7 @@ class Graph:
             speed: Animation speed setting
             order_type: How animations are ordered (ORDERED, SEQUENTIAL, or RANDOM)
             output: Optional output file path
+            delay: Optional delay in seconds before animations start (default: 0)
 
         Returns:
             Animated SVG content as string
@@ -51,7 +53,7 @@ class Graph:
         static_svg = self._renderer.render_to_svg(self.mermaid_definition)
 
         # Step 2: Process with animator to add CSS animations
-        animator = SVGAnimator(static_svg)
+        animator = SVGAnimator(static_svg, delay=delay)
         animated_svg = animator.process(adjusted_theme, order_type=order_type)
 
         # Step 4: Save to file if requested
