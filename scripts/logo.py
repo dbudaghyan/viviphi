@@ -2,15 +2,22 @@
 """Create the viviphi logo - fast network design with neon theme."""
 
 from pathlib import Path
-from viviphi import Graph, Theme, BackgroundStyling, EdgeStyling, NodeStyling, AnimationStyling
+from viviphi import (
+    Graph,
+    Theme,
+    BackgroundStyling,
+    EdgeStyling,
+    NodeStyling,
+    AnimationStyling,
+)
 
 
 def create_logo():
     """Create the viviphi logo with fast network neon design."""
-    
+
     output_dir = Path("examples/outputs")
     output_dir.mkdir(exist_ok=True)
-    
+
     # Network design with v,i,v,i,φ structure
     logo_mermaid = """
     graph LR
@@ -36,7 +43,7 @@ def create_logo():
         style I2 fill:#4ecdc4,stroke:#333,stroke-width:2px,color:#fff
         style PHI fill:#ffd93d,stroke:#333,stroke-width:4px,color:#333,font-size:28px
     """
-    
+
     # Fast neon theme
     theme = Theme(
         primary_color="#00ffff",
@@ -52,16 +59,19 @@ def create_logo():
             style="neon", width=1.5, glow_enabled=True, glow_intensity=8.0, opacity=0.8
         ),
         nodes=NodeStyling(
-            style="glass", border_width=2.0, shadow=True,
-            shadow_color="rgba(0, 255, 255, 0.4)", opacity=0.9
+            style="glass",
+            border_width=2.0,
+            shadow=True,
+            shadow_color="rgba(0, 255, 255, 0.4)",
+            opacity=0.9,
         ),
         animation=AnimationStyling(duration=0.8, stagger_delay=0.08, easing="ease-out"),
     )
-    
+
     # Create the logo
     graph = Graph(logo_mermaid)
     output_file = output_dir / "viviphi_logo.svg"
-    
+
     graph.animate(theme=theme, speed="fast", output=str(output_file))
     print(f"Logo created: {output_file}")
 
