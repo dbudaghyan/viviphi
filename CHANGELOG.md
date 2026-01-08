@@ -2,6 +2,10 @@
 
 ## [1.0]
 
+### [1.1.2] - 2026-01-08
+- Update logo(s) and readme.
+- Add coverage tests.
+
 ### [1.1.1] - 2026-01-06
 - Fix rendering bugs with animations and cylinder rendering missalignment.
 - Update and beautify the readme
