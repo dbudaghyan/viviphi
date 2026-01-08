@@ -26,8 +26,8 @@ jobs:
         with:
           enable-cache: true
       - name: Install dependencies
-        run: uv sync
+        run: uv sync --no-install-project
       - name: Run ruff
         run: |
-          ruff check --diff
-          ruff format --check --diff
+          uv run ruff check --diff
+          uv run ruff format --check --diff

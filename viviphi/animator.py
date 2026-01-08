@@ -115,231 +115,156 @@ class SVGAnimator:
         flipped = re.sub(r"(\d+(?:\.\d+)?),(\d+(?:\.\d+)?)", flip_coords, path_d)
         return flipped
 
-    def _get_css_template(self) -> str:
-        """Returns the CSS block for the animations."""
-        return """
-            /* Base Line Style - hide markers initially */
-            .anim-edge {
-                stroke-dasharray: var(--length);
-                stroke-dashoffset: var(--length);
-                animation: draw-flow-with-markers 1.5s ease-out forwards;
-                opacity: 0.8;
-            }
-            
-            /* The Draw Animation with marker reveal */
-            @keyframes draw-flow-with-markers {
-                0% { 
-                    stroke-dashoffset: var(--length);
-                    marker-start: none;
-                    marker-end: none;
-                }
-                99% { 
-                    stroke-dashoffset: 0;
-                    marker-start: none;
-                    marker-end: none;
-                }
-                100% { 
-                    stroke-dashoffset: 0;
-                    marker-start: var(--marker-start, none);
-                    marker-end: var(--marker-end, none);
-                }
-            }
-            
-            /* Node Entrance Animation */
-            .anim-node {
-                opacity: 0;
-                animation: fade-in 0.5s ease-out forwards;
-            }
-            
-            @keyframes fade-in {
-                to { opacity: 1; }
-            }
-            
-            /* Glow Filter Effect */
-            .neon-glow {
-                filter: drop-shadow(0 0 5px var(--glow-color, #00ffcc));
-            }
+    def _hide_all_animatable_elements(self) -> None:
+        """Hide all animatable elements immediately to prevent FOUC.
+
+        This adds initial styling to prevent flash before CSS animations start.
+        Only hides elements that don't already have transforms or specific styling.
         """
-
-    def process(self, color: str = "#00ffcc") -> str:
-        """Process the SVG to add animations.
-
-        Args:
-            color: Primary color for animations and glow effects
-
-        Returns:
-            Animated SVG as string
-        """
-        # 1. Inject CSS
-        style_el = ET.Element("style")
-        style_el.text = self._get_css_template()
-        self.root.insert(0, style_el)
-
-        # 2. Process Paths (Edges) - separate line paths from arrow tip paths
+        # Get all paths that are not inside markers (edges and node shapes)
         all_paths = self.root.findall(".//svg:path", self.ns)
-
-        # Find paths inside markers (arrow tips)
         marker_paths = self.root.findall(".//svg:marker//svg:path", self.ns)
         marker_path_set = set(marker_paths)
 
-        # Separate paths into lines (outside markers), arrow tips (inside markers), and node shapes
-        line_paths = []
-        arrow_tip_paths = []
-        node_shape_paths = []
+        animatable_paths = [path for path in all_paths if path not in marker_path_set]
 
-        for path in all_paths:
-            if path in marker_path_set:
-                arrow_tip_paths.append(path)
-            elif self._is_node_shape_path(path):
-                node_shape_paths.append(path)
-            else:
-                line_paths.append(path)
+        # Get all node elements (excluding those inside markers)
+        all_rects = self.root.findall(".//svg:rect", self.ns)
+        all_circles = self.root.findall(".//svg:circle", self.ns)
+        all_ellipses = self.root.findall(".//svg:ellipse", self.ns)
+        all_polygons = self.root.findall(".//svg:polygon", self.ns)
 
-        # Process line paths first
-        for i, path in enumerate(line_paths):
-            d_string = path.get("d")
-            if not d_string:
-                continue
+        marker_rects = self.root.findall(".//svg:marker//svg:rect", self.ns)
+        marker_circles = self.root.findall(".//svg:marker//svg:circle", self.ns)
+        marker_ellipses = self.root.findall(".//svg:marker//svg:ellipse", self.ns)
+        marker_polygons = self.root.findall(".//svg:marker//svg:polygon", self.ns)
 
-            try:
-                # Calculate geometry using svgpathtools
-                path_obj = parse_path(d_string)
-                length = path_obj.length()
-
-                # Check semantic direction data to ensure proper animation flow
-                flow_direction = path.get("data-flow-direction", "forward")
-                marker_start = path.get("marker-start", "none")
-                marker_end = path.get("marker-end", "none")
-
-                # Determine if path needs reversal based on marker placement vs semantic direction
-                needs_reversal = False
-                if flow_direction == "forward":
-                    # Forward flow should have marker at end of path animation
-                    # If marker-start is set (arrow at beginning), path needs reversal
-                    if marker_start != "none" and marker_end == "none":
-                        needs_reversal = True
-                elif flow_direction == "backward":
-                    # Backward flow should have marker at start of path animation
-                    # If marker-end is set (arrow at end), path needs reversal
-                    if marker_end != "none" and marker_start == "none":
-                        needs_reversal = True
-
-                if needs_reversal:
-                    # Reverse the path for proper tail-to-tip animation
-                    path_obj = path_obj.reversed()
-                    path.set("d", path_obj.d())
-                    length = path_obj.length()
-
-                    # Fix marker orientation by creating reversed marker definitions
-                    if marker_start != "none":
-                        marker_id = marker_start.replace("url(#", "").replace(")", "")
-                        self._create_reversed_marker(marker_id)
-                        marker_start = f"url(#{marker_id}_reversed)"
-
-                    if marker_end != "none":
-                        marker_id = marker_end.replace("url(#", "").replace(")", "")
-                        self._create_reversed_marker(marker_id)
-                        marker_end = f"url(#{marker_id}_reversed)"
-
-                    # Swap marker attributes to match reversed path
-                    path.set("marker-start", marker_end)
-                    path.set("marker-end", marker_start)
-                    # Update local variables
-                    marker_start, marker_end = marker_end, marker_start
-
-                # Use semantic animation order if available, otherwise fall back to index
-                animation_order = path.get("data-animation-order")
-                if animation_order is not None:
-                    delay = int(animation_order) * 0.3
-                else:
-                    # Fallback to index-based timing
-                    delay = i * 0.3
-
-                existing_style = path.get("style", "")
-                new_style = (
-                    f"{existing_style}; "
-                    f"--length: {length:.2f}; "
-                    f"--glow-color: {color}; "
-                    f"--marker-start: {marker_start}; "
-                    f"--marker-end: {marker_end}; "
-                    f"animation-delay: {delay}s;"
-                )
-
-                path.set("style", new_style)
-                path.set("class", "anim-edge neon-glow")
-
-                # Remove marker attributes so they start hidden
-                if marker_start != "none":
-                    path.attrib.pop("marker-start", None)
-                if marker_end != "none":
-                    path.attrib.pop("marker-end", None)
-
-                # Enforce styling overrides for consistency
-                path.set("stroke", color)
-                path.set("fill", "none")
-
-            except Exception as e:
-                print(f"Skipping complex line path {i}: {e}")
-
-        # Process arrow tip paths after lines with additional delay
-        for i, path in enumerate(arrow_tip_paths):
-            d_string = path.get("d")
-            if not d_string:
-                continue
-
-            try:
-                # Calculate geometry using svgpathtools
-                path_obj = parse_path(d_string)
-                length = path_obj.length()
-
-                # Arrow tips animate after lines finish
-                # Add extra delay so arrow tips appear after lines are drawn
-                base_line_delay = len(line_paths) * 0.3
-                arrow_delay = base_line_delay + (i * 0.1)  # Faster stagger for tips
-
-                existing_style = path.get("style", "")
-                new_style = (
-                    f"{existing_style}; "
-                    f"--length: {length:.2f}; "
-                    f"--glow-color: {color}; "
-                    f"animation-delay: {arrow_delay}s;"
-                )
-
-                path.set("style", new_style)
-                path.set("class", "anim-edge neon-glow")
-
-                # Enforce styling overrides for consistency
-                path.set("stroke", color)
-                path.set("fill", "none")
-
-            except Exception as e:
-                print(f"Skipping complex arrow tip path {i}: {e}")
-
-        # Process non-path arrow tip elements (circles, rects, etc.) after lines
-        marker_elements = (
-            self.root.findall(".//svg:marker//svg:rect", self.ns)
-            + self.root.findall(".//svg:marker//svg:circle", self.ns)
-            + self.root.findall(".//svg:marker//svg:ellipse", self.ns)
-            + self.root.findall(".//svg:marker//svg:polygon", self.ns)
+        marker_elements_set = set(
+            marker_rects + marker_circles + marker_ellipses + marker_polygons
         )
 
-        for i, element in enumerate(marker_elements):
-            # Arrow tip elements animate after lines and path arrow tips
-            base_delay = len(line_paths) * 0.3 + len(arrow_tip_paths) * 0.1
-            arrow_delay = base_delay + (
-                i * 0.05
-            )  # Even faster stagger for non-path tips
+        animatable_nodes = []
+        for element_list in [all_rects, all_circles, all_ellipses, all_polygons]:
+            for element in element_list:
+                if element not in marker_elements_set:
+                    animatable_nodes.append(element)
 
-            existing_style = element.get("style", "")
-            new_style = f"{existing_style}; animation-delay: {arrow_delay}s;"
-            element.set("style", new_style)
+        # Hide edges by setting initial stroke-dashoffset to hide the line
+        for path in animatable_paths:
+            # Don't hide paths that are part of node shapes or have transforms
+            if not self._is_node_shape_path(path) and not path.get("transform"):
+                existing_style = path.get("style", "")
+                # For edges, we'll rely on CSS animation starting state rather than opacity
+                # This prevents breaking the stroke-dasharray animation
+                pass
 
-            # Apply edge class for arrow tips (not node class)
-            element.set("class", "anim-edge neon-glow")
+        # Hide nodes that will be animated (but preserve those with transforms)
+        for element in animatable_nodes:
+            # Skip elements that have transforms (like database cylinders)
+            if not element.get("transform"):
+                existing_style = element.get("style", "")
+                # Add opacity: 0 only to elements without transforms
+                if existing_style:
+                    if "opacity:" not in existing_style:
+                        new_style = f"{existing_style}; opacity: 0"
+                        element.set("style", new_style)
+                else:
+                    element.set("style", "opacity: 0")
 
-        return ET.tostring(self.root, encoding="unicode")
+    def _fix_database_alignment(self) -> None:
+        """Dynamically fix database cylinder alignment by analyzing the visual structure.
 
-    def process_with_theme(self, theme: "Theme", order_type: OrderType = OrderType.ORDERED) -> str:
+        Database nodes should have the text label positioned on the 'wall' of the cylinder,
+        not on the top or bottom. This analyzes the cylinder geometry to find the proper
+        vertical center and aligns both elements accordingly.
+        """
+        # Find all database node groups
+        all_groups = self.root.findall(".//svg:g", self.ns)
+
+        for group in all_groups:
+            # Look for database nodes containing both a path (cylinder) and text label
+            paths = group.findall(".//svg:path", self.ns)
+            labels = group.findall(".//svg:g[@class='label']", self.ns)
+
+            if not paths or not labels:
+                continue
+
+            for path in paths:
+                path_d = path.get("d", "")
+                # Check if this is a database cylinder (has the characteristic "a" arc commands)
+                # Database cylinders have: M x,y a rx,ry ... (arc for top ellipse)
+                if "a " in path_d and path.get("transform"):
+                    # Extract cylinder geometry from the path data
+                    import re
+
+                    # Parse the path: M x,y a rx,ry ... l 0,height a rx,ry ...
+                    path_parts = re.search(
+                        r"M\s+([-\d.]+),([-\d.]+)\s+a\s+([-\d.]+),([-\d.]+)[^l]+l\s+0,([-\d.]+)",
+                        path_d,
+                    )
+                    if path_parts:
+                        # Extract cylinder dimensions
+                        start_y = float(path_parts.group(2))
+                        height = float(path_parts.group(5))
+
+                        # Calculate the visual center of the cylinder wall
+                        # This should be at the middle of the cylinder height, accounting for the ellipse
+                        cylinder_visual_center_y = start_y + (height / 2)
+
+                        # Find the corresponding text label
+                        for label in labels:
+                            label_transform = label.get("transform", "")
+                            path_transform = path.get("transform", "")
+
+                            if (
+                                "translate(" in label_transform
+                                and "translate(" in path_transform
+                            ):
+                                label_match = re.search(
+                                    r"translate\(([-\d.]+),\s*([-\d.]+)\)",
+                                    label_transform,
+                                )
+                                path_match = re.search(
+                                    r"translate\(([-\d.]+),\s*([-\d.]+)\)",
+                                    path_transform,
+                                )
+
+                                if label_match and path_match:
+                                    label_x, label_y = (
+                                        float(label_match.group(1)),
+                                        float(label_match.group(2)),
+                                    )
+                                    path_x, path_y = (
+                                        float(path_match.group(1)),
+                                        float(path_match.group(2)),
+                                    )
+
+                                    # Calculate the target Y position for proper alignment
+                                    # Text should be at the visual center of the cylinder wall
+                                    target_y = path_y + cylinder_visual_center_y
+
+                                    # Align both elements to the calculated center
+                                    if (
+                                        abs(target_y - label_y) > 1.0
+                                    ):  # Only fix if there's significant misalignment
+                                        # Move the text label to the cylinder wall center
+                                        new_label_transform = (
+                                            f"translate({label_x}, {target_y})"
+                                        )
+                                        label.set("transform", new_label_transform)
+
+                                        # Also adjust the cylinder if needed to ensure proper visual alignment
+                                        # The cylinder should be positioned so its wall center aligns with text
+                                        cylinder_adjust_y = (
+                                            target_y - cylinder_visual_center_y
+                                        )
+                                        new_path_transform = (
+                                            f"translate({path_x}, {cylinder_adjust_y})"
+                                        )
+                                        path.set("transform", new_path_transform)
+                                        break
+
+    def process(self, theme: "Theme", order_type: OrderType = OrderType.ORDERED) -> str:
         """Process the SVG with a specific theme.
 
         Args:
@@ -353,6 +278,12 @@ class SVGAnimator:
         style_el = ET.Element("style")
         style_el.text = theme.get_css_template()
         self.root.insert(0, style_el)
+
+        # 1.5. Fix database cylinder alignment dynamically
+        self._fix_database_alignment()
+
+        # 1.6. Immediately hide all elements that will be animated to prevent FOUC
+        self._hide_all_animatable_elements()
 
         # 2. Process Paths (Edges) - separate line paths from arrow tip paths
         all_paths = self.root.findall(".//svg:path", self.ns)
@@ -441,6 +372,7 @@ class SVGAnimator:
                 elif order_type == OrderType.RANDOM:
                     # Random delay between 0 and max sequential delay
                     import random
+
                     max_delay = len(line_paths) * theme.stagger_delay
                     delay = random.uniform(0, max_delay)
                 else:
@@ -477,7 +409,7 @@ class SVGAnimator:
                 path.set("stroke", theme.primary_color)
                 path.set("fill", "none")
 
-            except Exception as e:
+            except Exception as e:  # pragma: no cover
                 print(f"Skipping complex line path {i}: {e}")
 
         # Process arrow tip paths after lines with additional delay
@@ -505,7 +437,10 @@ class SVGAnimator:
                 elif order_type == OrderType.RANDOM:
                     # Random delay for arrow tips
                     import random
-                    max_delay = (len(line_paths) + len(arrow_tip_paths)) * theme.stagger_delay
+
+                    max_delay = (
+                        len(line_paths) + len(arrow_tip_paths)
+                    ) * theme.stagger_delay
                     arrow_delay = random.uniform(0, max_delay)
                 else:
                     # Fallback to simultaneous
@@ -533,7 +468,7 @@ class SVGAnimator:
                 path.set("stroke", theme.primary_color)
                 path.set("fill", "none")
 
-            except Exception as e:
+            except Exception as e:  # pragma: no cover
                 print(f"Skipping complex arrow tip path {i}: {e}")
 
         # Process non-path arrow tip elements (circles, rects, etc.) after lines
@@ -564,7 +499,10 @@ class SVGAnimator:
             elif order_type == OrderType.RANDOM:
                 # Random delay for marker elements
                 import random
-                max_delay = (len(line_paths) + len(arrow_tip_paths) + len(marker_elements)) * theme.stagger_delay
+
+                max_delay = (
+                    len(line_paths) + len(arrow_tip_paths) + len(marker_elements)
+                ) * theme.stagger_delay
                 arrow_delay = random.uniform(0, max_delay)
             else:
                 # Fallback to simultaneous
@@ -614,24 +552,21 @@ class SVGAnimator:
             elif order_type == OrderType.RANDOM:
                 # Random delay for nodes
                 import random
+
                 max_delay = len(nodes) * theme.stagger_delay * 0.5
                 delay = random.uniform(0, max_delay)
             else:
                 # Fallback to simultaneous
                 delay = 0
 
-            # More precise skip conditions for complex shapes
-            node_tag = node.tag.split("}")[-1] if "}" in node.tag else node.tag
+            # Check if node has transform that would conflict with CSS animations
             has_transform = node.get("transform") is not None
 
             # Skip animation for shapes with ANY transform attributes
             # CSS animations with transform properties will override existing transforms
             skip_animation = False
-            if has_transform and node_tag == "polygon":
-                # Skip all polygon transforms - CSS transform animations conflict with positioning
-                skip_animation = True
-            elif node_tag == "path" and has_transform:
-                # Always skip path nodes with transforms (these are shape definitions)
+            if has_transform:
+                # Skip ALL elements with existing transforms to prevent overriding positioning
                 skip_animation = True
 
             if not skip_animation:
@@ -659,6 +594,9 @@ class SVGAnimator:
 
         # 4. Process node-defining paths separately (like database shapes)
         for i, path in enumerate(node_shape_paths):
+            # Check if this path has transforms that would be overwritten by CSS animations
+            has_transform = path.get("transform") is not None
+
             # Calculate node shape path delay based on order type
             if order_type == OrderType.ORDERED:
                 delay = i * theme.stagger_delay * 0.5
@@ -667,21 +605,35 @@ class SVGAnimator:
             elif order_type == OrderType.RANDOM:
                 # Random delay for node shape paths
                 import random
+
                 max_delay = len(node_shape_paths) * theme.stagger_delay * 0.5
                 delay = random.uniform(0, max_delay)
             else:
                 # Fallback to simultaneous
                 delay = 0
-            existing_style = path.get("style", "")
-            new_style = f"{existing_style}; animation-delay: {delay}s;"
-            path.set("style", new_style)
+
+            # Only apply animation styling if there's no transform conflict
+            if not has_transform:
+                existing_style = path.get("style", "")
+                new_style = f"{existing_style}; animation-delay: {delay}s;"
+                path.set("style", new_style)
 
             # Apply theme-specific node classes for node shape paths
-            if theme.node_style == "glass":
-                path.set("class", "anim-node glass-node")
-            elif theme.node_style == "outlined":
-                path.set("class", "anim-node outlined-node")
+            if has_transform:
+                # For paths with transforms, use static classes without animation
+                if theme.node_style == "glass":
+                    path.set("class", "glass-node")
+                elif theme.node_style == "outlined":
+                    path.set("class", "outlined-node")
+                else:
+                    path.set("class", "solid-node")
             else:
-                path.set("class", "anim-node solid-node")
+                # For normal paths, use animated classes
+                if theme.node_style == "glass":
+                    path.set("class", "anim-node glass-node")
+                elif theme.node_style == "outlined":
+                    path.set("class", "anim-node outlined-node")
+                else:
+                    path.set("class", "anim-node solid-node")
 
         return ET.tostring(self.root, encoding="unicode")

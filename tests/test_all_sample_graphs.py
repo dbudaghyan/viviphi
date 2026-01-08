@@ -1,6 +1,7 @@
 """Comprehensive test of ALL sample Mermaid graphs."""
 
 import pytest
+import unittest
 from pathlib import Path
 from viviphi import Graph, CYBERPUNK
 from viviphi.mermaid import MermaidRenderer
@@ -162,3 +163,76 @@ class TestAllSampleGraphs:
         
         # Store results for later analysis
         self._test_results = results
+
+
+class TestSampleGraphsUnitTest(unittest.TestCase):
+    """Simplified unittest-compatible version of sample graph tests."""
+    
+    def setUp(self):
+        """Set up test fixtures."""
+        self.samples_dir = Path(__file__).parent.parent / "resources" / "mermaid_graphs"
+    
+    def test_unicode_characters_rendering(self):
+        """Test specific case that was failing - Unicode characters."""
+        file_path = self.samples_dir / "04_special_characters_unicode.mmd"
+        if not file_path.exists():
+            self.skipTest("Sample file not found")
+            
+        mermaid_content = file_path.read_text(encoding='utf-8')
+        
+        # Test static SVG generation
+        renderer = MermaidRenderer(headless=True)
+        static_svg = renderer.render_to_svg(mermaid_content)
+        
+        self.assertIsNotNone(static_svg)
+        self.assertIn("<svg", static_svg)
+        self.assertIn("</svg>", static_svg)
+        
+        # Test animation
+        graph = Graph(mermaid_content)
+        animated_svg = graph.animate(theme=CYBERPUNK)
+        
+        self.assertIsNotNone(animated_svg)
+        self.assertIn("<style>", animated_svg)
+        self.assertIn("@keyframes", animated_svg)
+    
+    def test_basic_flowchart_rendering(self):
+        """Test basic flowchart rendering."""
+        file_path = self.samples_dir / "01_kitchen_sink_flowchart.mmd"
+        if not file_path.exists():
+            self.skipTest("Sample file not found")
+            
+        mermaid_content = file_path.read_text(encoding='utf-8')
+        
+        # Test both static and animated rendering
+        renderer = MermaidRenderer(headless=True)
+        static_svg = renderer.render_to_svg(mermaid_content)
+        self.assertIsNotNone(static_svg)
+        
+        graph = Graph(mermaid_content)
+        animated_svg = graph.animate(theme=CYBERPUNK)
+        self.assertIsNotNone(animated_svg)
+        self.assertIn("@keyframes", animated_svg)
+    
+    def test_all_sample_files_exist(self):
+        """Test that all expected sample files exist."""
+        expected_files = [
+            "01_kitchen_sink_flowchart.mmd",
+            "02_nested_subgraphs_direction.mmd", 
+            "03_styling_and_classes.mmd",
+            "04_special_characters_unicode.mmd",
+            "05_sequence_diagram.mmd",
+            "06_class_diagram.mmd",
+            "07_state_diagram.mmd", 
+            "08_entity_relationship_diagram.mmd",
+            "09_gantt_chart.mmd",
+            "10_stress_test.mmd",
+            "11_interaction_click_events.mmd"
+        ]
+        
+        missing_files = []
+        for filename in expected_files:
+            if not (self.samples_dir / filename).exists():
+                missing_files.append(filename)
+        
+        self.assertEqual(missing_files, [], f"Missing sample files: {missing_files}")
