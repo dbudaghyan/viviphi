@@ -429,13 +429,15 @@ class SVGAnimator:
                 if order_type == OrderType.ORDERED:
                     # Add extra delay so arrow tips appear after lines are drawn
                     base_line_delay = len(line_paths) * theme.stagger_delay
-                    arrow_delay = self.delay + base_line_delay + (
-                        i * theme.stagger_delay * 0.2
+                    arrow_delay = (
+                        self.delay + base_line_delay + (i * theme.stagger_delay * 0.2)
                     )  # Faster stagger for tips
                 elif order_type == OrderType.SEQUENTIAL:
                     # Sequential timing for arrow tips
                     base_line_delay = len(line_paths) * theme.stagger_delay
-                    arrow_delay = self.delay + base_line_delay + (i * theme.stagger_delay * 0.2)
+                    arrow_delay = (
+                        self.delay + base_line_delay + (i * theme.stagger_delay * 0.2)
+                    )
                 elif order_type == OrderType.RANDOM:
                     # Random delay for arrow tips
                     import random
@@ -488,8 +490,8 @@ class SVGAnimator:
                     len(line_paths) * theme.stagger_delay
                     + len(arrow_tip_paths) * theme.stagger_delay * 0.2
                 )
-                arrow_delay = self.delay + base_delay + (
-                    i * theme.stagger_delay * 0.1
+                arrow_delay = (
+                    self.delay + base_delay + (i * theme.stagger_delay * 0.1)
                 )  # Even faster stagger for non-path tips
             elif order_type == OrderType.SEQUENTIAL:
                 # Sequential timing for marker elements
@@ -548,9 +550,13 @@ class SVGAnimator:
         for i, node in enumerate(nodes):
             # Calculate node delay based on order type
             if order_type == OrderType.ORDERED:
-                delay = self.delay + i * theme.stagger_delay * 0.5  # Nodes appear before edges
+                delay = (
+                    self.delay + i * theme.stagger_delay * 0.5
+                )  # Nodes appear before edges
             elif order_type == OrderType.SEQUENTIAL:
-                delay = self.delay + i * theme.stagger_delay * 0.5  # Sequential node timing
+                delay = (
+                    self.delay + i * theme.stagger_delay * 0.5
+                )  # Sequential node timing
             elif order_type == OrderType.RANDOM:
                 # Random delay for nodes
                 import random
